@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "HelloWorld",
-    "slug": "expo-template-default",
+    "name": "mealplanet",
+    "slug": "mealplanet",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -13,13 +13,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.patrickfontaine.mealplanet"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.patrickfontaine.mealplanet"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +33,18 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e47f3cba-dcd9-47ba-961d-eadc6ccfc669"
+      }
+    },
+    "owner": "patrickfontaine",
+    "updates": {
+      "url": "https://u.expo.dev/e47f3cba-dcd9-47ba-961d-eadc6ccfc669"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
