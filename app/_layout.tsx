@@ -23,6 +23,7 @@ export default function RootLayout() {
     <Stack screenOptions={defaultScreenOptions}>
       <Stack.Screen name="SignIn" />
       <Stack.Screen name="SignUp" />
+      <Stack.Screen name="CalendarPage" />
       {/* Add more screens here as your app grows */}
     </Stack>
   );

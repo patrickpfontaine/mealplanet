@@ -19,7 +19,7 @@ const SignIn = () => {
             
             <Pressable 
                 style={styles.signInButton}
-                onPress={() => {}}
+                onPress={() => router.push("/CalendarPage")}
             >
                 <Text style={styles.buttonText}>Sign in</Text>
             </Pressable>
@@ -37,24 +37,24 @@ const SignIn = () => {
             <Image 
                 style={styles.logo} 
                 resizeMode="cover" 
-                source={require("./logo.png")} 
+                source={require("./images/logo.png")} 
             />
 
             <View style={styles.socialIconsContainer}>
                 <Image 
                     style={styles.socialIcon} 
                     resizeMode="cover" 
-                    source={require("./google2.png")} 
+                    source={require("./images/google2.png")} 
                 />
                 <Image 
                     style={styles.socialIcon} 
                     resizeMode="cover" 
-                    source={require("./facebook2.png")} 
+                    source={require("./images/facebook2.png")} 
                 />
                 <Image 
                     style={styles.socialIcon} 
                     resizeMode="cover" 
-                    source={require("./apple2.png")} 
+                    source={require("./images/apple2.png")} 
                 />
             </View>
         </View>
