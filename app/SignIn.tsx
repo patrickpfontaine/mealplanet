@@ -157,11 +157,6 @@ const styles = StyleSheet.create({
         marginLeft: -125.5,
         width: 250
     },
-    signinbuttonChild: {
-        marginTop: -19.5,
-        borderRadius: 100,
-        backgroundColor: "#1a3b5d"
-    },
     signIn1: {
         marginTop: -8.5,
         marginLeft: -22.5,
@@ -170,9 +165,6 @@ const styles = StyleSheet.create({
         top: "50%",
         position: "absolute"
         
-    },
-    signinbutton: {
-        marginTop: 120
     },
     dontHaveAn: {
         marginTop: 218,
@@ -183,25 +175,6 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.interMedium,
         fontWeight: "500",
         fontSize: FontSize.size_sm
-    },
-    signupbuttonChild: {
-        marginTop: -13,
-        marginLeft: -44,
-        backgroundColor: "#90b766",
-        borderRadius: Border.br_3xs
-    },
-    signUp: {
-        marginLeft: -25,
-        textAlign: "left",
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm,
-        marginTop: -9,
-        color: Color.colorGray
-    },
-    signupbutton: {
-        marginTop: 250,
-        marginLeft: -43.5
     },
     welcome: {
         marginTop: -58,
