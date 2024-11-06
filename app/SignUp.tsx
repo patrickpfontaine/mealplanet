@@ -1,206 +1,199 @@
 import * as React from "react";
-import {StyleSheet, View, Text, Pressable, Image} from "react-native";
-import { useRouter } from "expo-router";
-import { FontFamily, FontSize, Color, Border } from "./GlobalStyles";
+import { StyleSheet, View, Text, Pressable, Image } from "react-native";
+import { useRouter } from 'expo-router';
+import { Border, FontFamily, FontSize, Color } from "./GlobalStyles";
 
 const SignUp = () => {
-    const router = useRouter();
-    		
-    		return (
-      			<View style={styles.signUp}>
-        				<View style={[styles.usernameprompt, styles.usernamepromptPosition]}>
-          					<View style={[styles.usernamepromptChild, styles.usernamepromptChildPosition]} />
-          					<Text style={[styles.username, styles.signTypo]}>Username</Text>
-        				</View>
-        				<View style={[styles.passwordprompt, styles.usernamepromptPosition]}>
-          					<View style={[styles.usernamepromptChild, styles.usernamepromptChildPosition]} />
-          					<Text style={[styles.username, styles.signTypo]}>Password</Text>
-        				</View>
-        				<View style={[styles.confirmpasswordprompt, styles.usernamepromptPosition]}>
-          					<View style={styles.usernamepromptChildPosition}>
-            						<View style={[styles.usernamepromptChild, styles.usernamepromptChildPosition]} />
-          					</View>
-          					<Text style={[styles.confirmPassword, styles.signTypo]}>Confirm Password</Text>
-        				</View>
-                        
-        				<View style={[styles.signupbutton, styles.signupbuttonPosition]}>
-          					<Pressable style={[styles.signupbuttonChild, styles.signupbuttonPosition]} onPress={()=>{}} />
-          					<Text style={[styles.signUp1, styles.signTypo]}>Sign up</Text>
-        				</View>
-        				<Text style={[styles.welcome, styles.signInPosition]}>Welcome!</Text>
-        				<Image style={[styles.image1Icon, styles.signUp1Position]} resizeMode="cover" source={require("./logo.png")} />
-        				<Text style={[styles.alreadyHaveAn, styles.signInPosition]}>{`Already have an account?
-`}</Text>
-            <View style={[styles.signinbutton, styles.signinbuttonPosition]}>
-                <Pressable style={[styles.signinbuttonChild, styles.signinbuttonPosition]} onPress={()=>router.push('/SignIn')} />
-                <Text style={[styles.signIn, styles.signInPosition]}>Sign In</Text>
-            </View>
-        </View>);
+  const router = useRouter(); // Hook from Expo Router for navigation
+
+  return (
+    <View style={styles.signUp}>
+      <View style={[styles.usernameprompt, styles.inputField]}>
+        <View style={styles.inputBackground} />
+        <Text style={styles.inputText}>Username</Text>
+      </View>
+      <View style={[styles.passwordprompt, styles.inputField]}>
+        <View style={styles.inputBackground} />
+        <Text style={styles.inputText}>Password</Text>
+      </View>
+      <View style={[styles.confirmpasswordprompt, styles.inputField]}>
+        <View style={styles.inputBackground} />
+        <Text style={styles.inputText}>Confirm Password</Text>
+      </View>
+
+      <Pressable 
+        style={styles.signUpButton}
+        onPress={() => {}}
+      >
+        <Text style={styles.buttonText}>Sign up</Text>
+      </Pressable>
+
+      <Text style={styles.alreadyHaveAn}>Already have an account?</Text>
+      
+      <Pressable 
+        style={styles.signInButton}
+        onPress={() => router.push("/SignIn")} // Using expo-router's push method for navigation
+      >
+        <Text style={styles.signInButtonText}>Sign In</Text>
+      </Pressable>
+
+      <Text style={styles.welcome}>Welcome!</Text>
+      <Image 
+        style={styles.logo} 
+        resizeMode="cover" 
+        source={require("./logo.png")} 
+      />
+
+      <View style={styles.socialIconsContainer}>
+        <Image 
+          style={styles.socialIcon} 
+          resizeMode="cover" 
+          source={require("./apple1.png")} 
+        />
+        <Image 
+          style={styles.socialIcon} 
+          resizeMode="cover" 
+          source={require("./facebook1.png")} 
+        />
+        <Image 
+          style={styles.socialIcon} 
+          resizeMode="cover" 
+          source={require("./google1.png")} 
+        />
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    usernamepromptPosition: {
-        height: 40,
-        width: 250,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    usernamepromptChildPosition: {
-        marginLeft: -125,
-        marginTop: -20,
-        height: 40,
-        width: 250,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    signTypo: {
-        textAlign: "left",
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm
-    },
-    signupbuttonPosition: {
-        height: 39,
-        width: 83,
-        marginLeft: -41.5,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    signInPosition: {
-        color: Color.colorGray,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    signUp1Position: {
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    signinbuttonPosition: {
-        height: 26,
-        width: 88,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    usernamepromptChild: {
-        backgroundColor: Color.colorLightsteelblue,
-        borderRadius: Border.br_3xs
-    },
-    username: {
-        marginLeft: -114,
-        color: Color.colorGray,
-        textAlign: "left",
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm,
-        marginTop: -9,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    usernameprompt: {
-        marginTop: 0,
-        marginLeft: -125.5,
-        height: 40,
-        width: 250
-    },
-    passwordprompt: {
-        marginTop: 51,
-        marginLeft: -125.5,
-        height: 40,
-        width: 250
-    },
-    confirmPassword: {
-        marginLeft: -115,
-        color: Color.colorGray,
-        textAlign: "left",
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm,
-        marginTop: -9,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    confirmpasswordprompt: {
-        marginTop: 101,
-        marginLeft: -124.5
-    },
-    signupbuttonChild: {
-        marginTop: -19.5,
-        borderRadius: 100,
-        backgroundColor: "#1a3b5d"
-    },
-    signUp1: {
-        marginTop: -8.5,
-        marginLeft: -25.5,
-        color: "#fff",
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm,
-        textAlign: "left",
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    signupbutton: {
-        marginTop: 170
-    },
-    welcome: {
-        marginTop: -58,
-        marginLeft: -58.5,
-        fontSize: 24,
-        fontWeight: "700",
-        fontFamily: FontFamily.interBold,
-        textAlign: "center"
-    },
-    image1Icon: {
-        marginTop: -358,
-        marginLeft: -160.5,
-        width: 309,
-        height: 244
-    },
-    alreadyHaveAn: {
-        marginTop: 249,
-        marginLeft: -81.5,
-        width: 173,
-        height: 21,
-        textAlign: "left",
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm
-    },
-    signinbuttonChild: {
-        marginTop: -13,
-        marginLeft: -44,
-        backgroundColor: "#90b766",
-        borderRadius: Border.br_3xs
-    },
-    signIn: {
-        marginLeft: -25,
-        textAlign: "left",
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm,
-        marginTop: -9,
-        color: Color.colorGray
-    },
-    signinbutton: {
-        marginTop: 283,
-        marginLeft: -44.5
-    },
-    signUp: {
-        backgroundColor: "#f3ede4",
-        flex: 1,
-        width: "100%",
-        height: 852,
-        overflow: "hidden"
-    }
+  signUp: {
+    backgroundColor: "#f3ede4",
+    flex: 1,
+    width: "100%",
+    height: 852,
+    overflow: "hidden",
+  },
+  inputField: {
+    height: 40,
+    width: 250,
+    position: 'absolute',
+    left: '50%',
+    marginLeft: -125,
+  },
+  usernameprompt: {
+    top: '40%',
+    marginTop: -24,
+  },
+  passwordprompt: {
+    top: '40%',
+    marginTop: 27,
+  },
+  confirmpasswordprompt: {
+    top: '40%',
+    marginTop: 76,
+  },
+  inputBackground: {
+    backgroundColor: Color.colorLightsteelblue,
+    borderRadius: Border.br_3xs,
+    height: '100%',
+    width: '100%',
+  },
+  inputText: {
+    position: 'absolute',
+    left: 11,
+    top: '50%',
+    transform: [{translateY: -9}],
+    color: "rgba(79, 86, 93, 0.8)",
+    fontFamily: FontFamily.interMedium,
+    fontWeight: "500",
+    fontSize: FontSize.size_sm,
+  },
+  signUpButton: {
+    position: 'absolute',
+    backgroundColor: "#1a3b5d",
+    borderRadius: 100,
+    height: 39,
+    width: 83,
+    justifyContent: 'center',
+    alignItems: 'center',
+    left: '50%',
+    marginLeft: -41.5,
+    top: '50%',
+    marginTop: 102,
+  },
+  buttonText: {
+    color: "#fff",
+    fontFamily: FontFamily.interMedium,
+    fontWeight: "500",
+    fontSize: FontSize.size_sm,
+  },
+  alreadyHaveAn: {
+    position: 'absolute',
+    left: '50%',
+    marginLeft: -77.5,
+    top: '50%',
+    marginTop: 238,
+    width: 157,
+    height: 20,
+    color: Color.colorGray,
+    fontFamily: FontFamily.interMedium,
+    fontWeight: "500",
+    fontSize: FontSize.size_sm,
+  },
+  signInButton: {
+    position: 'absolute',
+    backgroundColor: "#90b766",
+    borderRadius: Border.br_3xs,
+    height: 34,
+    width: 88,
+    justifyContent: 'center',
+    alignItems: 'center',
+    left: '50%',
+    marginLeft: -43.5,
+    top: '50%',
+    marginTop: 267,
+  },
+  signInButtonText: {
+    color: Color.colorGray,
+    fontFamily: FontFamily.interMedium,
+    fontWeight: "500",
+    fontSize: FontSize.size_sm,
+  },
+  welcome: {
+    position: 'absolute',
+    left: '50%',
+    marginLeft: -65.5,
+    top: '50%',
+    marginTop: -82,
+    fontSize: 24,
+    fontWeight: "700",
+    fontFamily: FontFamily.interBold,
+    color: Color.colorGray,
+    textAlign: 'center',
+  },
+  logo: {
+    position: 'absolute',
+    left: '50%',
+    marginLeft: -160.5,
+    top: '50%',
+    marginTop: -358,
+    width: 309,
+    height: 244,
+  },
+  socialIconsContainer: {
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 32,
+    left: '50%',
+    marginLeft: -72,
+    top: '50%',
+    marginTop: 165,
+  },
+  socialIcon: {
+    width: 48,
+    height: 48,
+  },
 });
 
 export default SignUp;

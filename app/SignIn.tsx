@@ -28,7 +28,7 @@ const SignIn = () => {
             
             <Pressable 
                 style={styles.signUpButton}
-                onPress={() => {}}
+                onPress={() => router.push("/SignUp")}
             >
                 <Text style={styles.signUpButtonText}>Sign up</Text>
             </Pressable>
