@@ -27,7 +27,7 @@ const SignIn = () => {
                 <Text style={[styles.signUp, styles.signUpPosition]}>Sign up</Text>
             </View>
             <Text style={[styles.welcome, styles.signUpPosition]}>Welcome!</Text>
-            <Image style={[styles.image1Icon, styles.signIn1Position]} resizeMode="cover" source={require("./logo")} />
+            <Image style={[styles.image1Icon, styles.signIn1Position]} resizeMode="cover" source={require("./logo.png")} />
         </View>);
 };
 
