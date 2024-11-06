@@ -19,7 +19,7 @@ const SignIn = () => {
             router.push("/CalendarPage");  // Navigate to CalendarPage on success
         } catch (error) {
             const e = error as Error;
-            Alert.alert("Error", e.message);  // Show error message if sign-in fails
+            Alert.alert("Wrong Email or Password", e.message);  // Show error message if sign-in fails
         }
     };
 
