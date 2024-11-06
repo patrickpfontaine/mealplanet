@@ -22,6 +22,7 @@ const SignUp = () => {
           					</View>
           					<Text style={[styles.confirmPassword, styles.signTypo]}>Confirm Password</Text>
         				</View>
+                        
         				<View style={[styles.signupbutton, styles.signupbuttonPosition]}>
           					<Pressable style={[styles.signupbuttonChild, styles.signupbuttonPosition]} onPress={()=>{}} />
           					<Text style={[styles.signUp1, styles.signTypo]}>Sign up</Text>

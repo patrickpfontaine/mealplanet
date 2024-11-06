@@ -1,4 +1,3 @@
-
 /* fonts */
 export const FontFamily = {
     interBold: "Inter-Bold",

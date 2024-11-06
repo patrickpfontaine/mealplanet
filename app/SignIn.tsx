@@ -3,65 +3,102 @@ import {StyleSheet, View, Text, Pressable, Image} from "react-native";
 import { FontFamily, FontSize, Color, Border } from "./GlobalStyles";
 import { useRouter } from "expo-router";
 
-
-
 const SignIn = () => {
     const router = useRouter();
 
-  	return (
-    		<View style={styles.signIn}>
-      			<View style={[styles.usernameprompt, styles.usernamepromptPosition]}>
-        		<View style={[styles.usernamepromptChild, styles.usernamepromptPosition]} />
-        		<Text style={[styles.username, styles.signTypo]}>Username</Text>
-      		</View>
-
-      		<View style={[styles.passwordprompt, styles.usernamepromptPosition]}>
-        		<View style={[styles.usernamepromptChild, styles.usernamepromptPosition]} />
-        			<Text style={[styles.password, styles.signTypo]}>Password</Text>
-      		</View>
-
-      		<Pressable 
+    return (
+        <View style={styles.signIn}>
+            <View style={[styles.usernameprompt, styles.inputField]}>
+                <View style={styles.inputBackground} />
+                <Text style={styles.inputText}>Username</Text>
+            </View>
+            <View style={[styles.passwordprompt, styles.inputField]}>
+                <View style={styles.inputBackground} />
+                <Text style={styles.inputText}>Password</Text>
+            </View>
+            
+            <Pressable 
                 style={styles.signInButton}
-                onPress={() => {}}>
+                onPress={() => {}}
+            >
                 <Text style={styles.buttonText}>Sign in</Text>
             </Pressable>
 
-      		<Text style={[styles.dontHaveAn, styles.signUpPosition]}>{`Don’t have an account?`}</Text>
-
+            <Text style={styles.dontHaveAn}>Don't have an account?</Text>
+            
             <Pressable 
                 style={styles.signUpButton}
-                onPress={() => router.push('/SignUp')}>
+                onPress={() => {}}
+            >
                 <Text style={styles.signUpButtonText}>Sign up</Text>
             </Pressable>
 
-            <Text style={[styles.welcome, styles.signUpPosition]}>Welcome!</Text>
-            
-            <Image style={[styles.image1Icon, styles.signIn1Position]} resizeMode="cover" source={require("./logo.png")} />
+            <Text style={styles.welcome}>Welcome!</Text>
+            <Image 
+                style={styles.logo} 
+                resizeMode="cover" 
+                source={require("./logo.png")} 
+            />
 
-        </View>);
+            <View style={styles.socialIconsContainer}>
+                <Image 
+                    style={styles.socialIcon} 
+                    resizeMode="cover" 
+                    source={require("./apple1.png")} 
+                />
+                <Image 
+                    style={styles.socialIcon} 
+                    resizeMode="cover" 
+                    source={require("./facebook1.png")} 
+                />
+                <Image 
+                    style={styles.socialIcon} 
+                    resizeMode="cover" 
+                    source={require("./google1.png")} 
+                />
+            </View>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-    usernamepromptPosition: {
+    signIn: {
+        backgroundColor: "#f3ede4",
+        flex: 1,
+        width: "100%",
+        height: 852,
+        overflow: "hidden",
+    },
+    inputField: {
         height: 40,
         width: 250,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
+        position: 'absolute',
+        left: '50%',
+        marginLeft: -125,
     },
-    signTypo: {
-        textAlign: "left",
+    usernameprompt: {
+        top: '50%',
+        marginTop: -24,
+    },
+    passwordprompt: {
+        top: '50%',
+        marginTop: 27,
+    },
+    inputBackground: {
+        backgroundColor: Color.colorLightsteelblue,
+        borderRadius: Border.br_3xs,
+        height: '100%',
+        width: '100%',
+    },
+    inputText: {
+        position: 'absolute',
+        left: 11,
+        top: '50%',
+        transform: [{translateY: -9}],
+        color: "rgba(79, 86, 93, 0.8)",
         fontFamily: FontFamily.interMedium,
         fontWeight: "500",
-        fontSize: FontSize.size_sm
-    },
-    signinbuttonPosition: {
-        height: 39,
-        width: 83,
-        marginLeft: -41.5,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
+        fontSize: FontSize.size_sm,
     },
     signInButton: {
         position: 'absolute',
@@ -74,7 +111,7 @@ const styles = StyleSheet.create({
         left: '50%',
         marginLeft: -41.5,
         top: '50%',
-        marginTop: 120,
+        marginTop: 102,
     },
     buttonText: {
         color: "#fff",
@@ -82,31 +119,31 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         fontSize: FontSize.size_sm,
     },
-    signUpPosition: {
+    dontHaveAn: {
+        position: 'absolute',
+        left: '50%',
+        marginLeft: -77.5,
+        top: '50%',
+        marginTop: 238,
+        width: 157,
+        height: 20,
         color: Color.colorGray,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    signupbuttonPosition: {
-        height: 26,
-        width: 88,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
+        fontFamily: FontFamily.interMedium,
+        fontWeight: "500",
+        fontSize: FontSize.size_sm,
     },
     signUpButton: {
         position: 'absolute',
         backgroundColor: "#90b766",
         borderRadius: Border.br_3xs,
-        height: 26,
+        height: 34,
         width: 88,
         justifyContent: 'center',
         alignItems: 'center',
         left: '50%',
         marginLeft: -43.5,
         top: '50%',
-        marginTop: 250,
+        marginTop: 267,
     },
     signUpButtonText: {
         color: Color.colorGray,
@@ -114,89 +151,41 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         fontSize: FontSize.size_sm,
     },
-    signIn1Position: {
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    usernamepromptChild: {
-        marginTop: -20,
-        marginLeft: -125,
-        backgroundColor: Color.colorLightsteelblue,
-        borderRadius: Border.br_3xs
-    },
-    username: {
-        color: "rgba(79, 86, 93, 0.8)",
-        marginLeft: -114,
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm,
-        marginTop: -9,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    usernameprompt: {
-        marginTop: 0,
-        marginLeft: -125.5,
-        width: 250
-    },
-    password: {
-        color: "#606a73",
-        marginLeft: -114,
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm,
-        marginTop: -9,
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-    },
-    passwordprompt: {
-        marginTop: 51,
-        marginLeft: -125.5,
-        width: 250
-    },
-    signIn1: {
-        marginTop: -8.5,
-        marginLeft: -22.5,
-        color: "#fff",
-        left: "50%",
-        top: "50%",
-        position: "absolute"
-        
-    },
-    dontHaveAn: {
-        marginTop: 218,
-        marginLeft: -77.5,
-        width: 157,
-        height: 20,
-        textAlign: "left",
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500",
-        fontSize: FontSize.size_sm
-    },
     welcome: {
-        marginTop: -58,
-        marginLeft: -58.5,
+        position: 'absolute',
+        left: '50%',
+        marginLeft: -65.5,
+        top: '50%',
+        marginTop: -82,
         fontSize: 24,
         fontWeight: "700",
         fontFamily: FontFamily.interBold,
-        textAlign: "center"
+        color: Color.colorGray,
+        textAlign: 'center',
     },
-    image1Icon: {
-        marginTop: -358,
+    logo: {
+        position: 'absolute',
+        left: '50%',
         marginLeft: -160.5,
+        top: '50%',
+        marginTop: -358,
         width: 309,
-        height: 244
+        height: 244,
     },
-    signIn: {
-        backgroundColor: "#f3ede4",
-        flex: 1,
-        width: "100%",
-        height: 852,
-        overflow: "hidden"
-    }
+    socialIconsContainer: {
+        position: 'absolute',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 32,
+        left: '50%',
+        marginLeft: -72,
+        top: '50%',
+        marginTop: 165,
+    },
+    socialIcon: {
+        width: 48,
+        height: 48,
+    },
 });
 
 export default SignIn;
