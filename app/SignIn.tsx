@@ -1,31 +1,66 @@
 import * as React from "react";
-import {StyleSheet, View, Text, Pressable, Image} from "react-native";
+import { StyleSheet, View, Text, Pressable, TextInput, Image, Alert } from "react-native";
 import { FontFamily, FontSize, Color, Border } from "./GlobalStyles";
 import { useRouter } from "expo-router";
+import { auth } from './config/firebaseConfig';  // Import auth from firebaseConfig
+import { signInWithEmailAndPassword } from "firebase/auth";  // Firebase v9+ imports
 
 const SignIn = () => {
     const router = useRouter();
 
+    // State variables for input fields
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+
+    const handleSignIn = async () => {
+        try {
+            // Attempt to sign in with email and password
+            await signInWithEmailAndPassword(auth, email, password);
+            router.push("/CalendarPage");  // Navigate to CalendarPage on success
+        } catch (error) {
+            const e = error as Error;
+            Alert.alert("Error", e.message);  // Show error message if sign-in fails
+        }
+    };
+
     return (
         <View style={styles.signIn}>
-            <View style={[styles.usernameprompt, styles.inputField]}>
+
+            {/* Email Input Field */}
+            <View style={[styles.emailprompt, styles.inputField]}>
                 <View style={styles.inputBackground} />
-                <Text style={styles.inputText}>Username</Text>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Email"
+                    placeholderTextColor="#606A73"
+                    value={email}
+                    onChangeText={setEmail}
+                />
             </View>
+
+            {/* Password Input Field */}
             <View style={[styles.passwordprompt, styles.inputField]}>
                 <View style={styles.inputBackground} />
-                <Text style={styles.inputText}>Password</Text>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Password"
+                    placeholderTextColor="#606A73"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                />
             </View>
             
+            {/* Sign In Button */}
             <Pressable 
                 style={styles.signInButton}
-                onPress={() => router.push("/CalendarPage")}
+                onPress={handleSignIn}  // Call the handleSignIn function
             >
                 <Text style={styles.buttonText}>Sign in</Text>
             </Pressable>
 
+            {/* Don't have an account link */}
             <Text style={styles.dontHaveAn}>Don't have an account?</Text>
-            
             <Pressable 
                 style={styles.signUpButton}
                 onPress={() => router.push("/SignUp")}
@@ -33,13 +68,17 @@ const SignIn = () => {
                 <Text style={styles.signUpButtonText}>Sign up</Text>
             </Pressable>
 
+            {/* Welcome Text */}
             <Text style={styles.welcome}>Welcome!</Text>
+
+            {/* Logo */}
             <Image 
                 style={styles.logo} 
                 resizeMode="cover" 
                 source={require("./images/logo.png")} 
             />
 
+            {/* Social Media Icons */}
             <View style={styles.socialIconsContainer}>
                 <Image 
                     style={styles.socialIcon} 
@@ -76,7 +115,7 @@ const styles = StyleSheet.create({
         left: '50%',
         marginLeft: -125,
     },
-    usernameprompt: {
+    emailprompt: {
         top: '50%',
         marginTop: -24,
     },
@@ -90,15 +129,18 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
     },
-    inputText: {
+    textInput: {
         position: 'absolute',
-        left: 11,
-        top: '50%',
-        transform: [{translateY: -9}],
-        color: "rgba(79, 86, 93, 0.8)",
+        left: 0,
+        top: 0,
+        width: '100%',
+        height: '100%',
+        paddingLeft: 11,
+        paddingRight: 11,
         fontFamily: FontFamily.interMedium,
         fontWeight: "500",
         fontSize: FontSize.size_sm,
+        color: "#333",
     },
     signInButton: {
         position: 'absolute',
@@ -189,3 +231,4 @@ const styles = StyleSheet.create({
 });
 
 export default SignIn;
+

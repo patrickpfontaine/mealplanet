@@ -89,7 +89,7 @@ const CalendarPage = () => {
 
             <Pressable 
                 style={[styles.groupbutton, styles.recipebuttonLayout]}
-                onPress={() => router.push("/SignIn")} // Change to your target page
+                onPress={() => router.push("/GroupPage")} // Change to your target page
             >
                 <View style={[styles.recipebuttonChild, styles.recipebuttonLayout]} />
                 <Text style={[styles.recipe1, styles.recipeTypo]}>Group</Text>

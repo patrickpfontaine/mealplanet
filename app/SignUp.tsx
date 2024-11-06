@@ -1,64 +1,123 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Pressable, Image } from "react-native";
+import { StyleSheet, View, Text, Pressable, TextInput, Image, Alert } from "react-native";
 import { useRouter } from 'expo-router';
+import { auth } from './config/firebaseConfig';  // Import auth from firebaseConfig
+import { createUserWithEmailAndPassword } from "firebase/auth";  // Firebase v9+ imports
 import { Border, FontFamily, FontSize, Color } from "./GlobalStyles";
 
 const SignUp = () => {
   const router = useRouter(); // Hook from Expo Router for navigation
 
+  // State variables for input fields
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+
+  const handleSignUp = async () => {
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match!");
+      return;
+    }
+
+    try {
+      // Sign up with email and password using the `auth` object
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User created:", userCredential.user);
+
+      // Navigate to the next page (you can modify this path)
+      router.push("/CalendarPage"); 
+    } catch (error) {
+      // Type assertion to treat 'error' as an instance of Error
+      const e = error as Error;
+      Alert.alert("Error", e.message); // Show error message if sign-up fails
+    }
+  };
+
   return (
     <View style={styles.signUp}>
-      <View style={[styles.usernameprompt, styles.inputField]}>
+
+      {/* Email Input Field */}
+      <View style={[styles.emailprompt, styles.inputField]}>
         <View style={styles.inputBackground} />
-        <Text style={styles.inputText}>Username</Text>
-      </View>
-      <View style={[styles.passwordprompt, styles.inputField]}>
-        <View style={styles.inputBackground} />
-        <Text style={styles.inputText}>Password</Text>
-      </View>
-      <View style={[styles.confirmpasswordprompt, styles.inputField]}>
-        <View style={styles.inputBackground} />
-        <Text style={styles.inputText}>Confirm Password</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Email"
+          placeholderTextColor="#606A73"
+          value={email}
+          onChangeText={setEmail}
+        />
       </View>
 
-      <Pressable 
+      {/* Password Input Field */}
+      <View style={[styles.passwordprompt, styles.inputField]}>
+        <View style={styles.inputBackground} />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Password"
+          placeholderTextColor="#606A73"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+      </View>
+
+      {/* Confirm Password Input Field */}
+      <View style={[styles.confirmpasswordprompt, styles.inputField]}>
+        <View style={styles.inputBackground} />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Confirm Password"
+          placeholderTextColor="#606A73"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+        />
+      </View>
+
+      {/* Sign Up Button */}
+      <Pressable
         style={styles.signUpButton}
-        onPress={() => router.push("/CalendarPage")}
+        onPress={handleSignUp}  // Call the handleSignUp function here
       >
         <Text style={styles.buttonText}>Sign up</Text>
       </Pressable>
 
+      {/* Link to Sign In */}
       <Text style={styles.alreadyHaveAn}>Already have an account?</Text>
-      
-      <Pressable 
+      <Pressable
         style={styles.signInButton}
-        onPress={() => router.push("/SignIn")} // Using expo-router's push method for navigation
+        onPress={() => router.push("/SignIn")}
       >
         <Text style={styles.signInButtonText}>Sign In</Text>
       </Pressable>
 
+      {/* Welcome Text */}
       <Text style={styles.welcome}>Create an account!</Text>
-      <Image 
-        style={styles.logo} 
-        resizeMode="cover" 
-        source={require("./images/logo.png")} 
+
+      {/* Logo */}
+      <Image
+        style={styles.logo}
+        resizeMode="cover"
+        source={require("./images/logo.png")}
       />
 
+      {/* Social Media Icons */}
       <View style={styles.socialIconsContainer}>
-        <Image 
-          style={styles.socialIcon} 
-          resizeMode="cover" 
-          source={require("./images/google2.png")} 
+        <Image
+          style={styles.socialIcon}
+          resizeMode="cover"
+          source={require("./images/google2.png")}
         />
-        <Image 
-          style={styles.socialIcon} 
-          resizeMode="cover" 
-          source={require("./images/facebook2.png")} 
+        <Image
+          style={styles.socialIcon}
+          resizeMode="cover"
+          source={require("./images/facebook2.png")}
         />
-        <Image 
-          style={styles.socialIcon} 
-          resizeMode="cover" 
-          source={require("./images/apple2.png")} 
+        <Image
+          style={styles.socialIcon}
+          resizeMode="cover"
+          source={require("./images/apple2.png")}
         />
       </View>
     </View>
@@ -80,7 +139,7 @@ const styles = StyleSheet.create({
     left: '50%',
     marginLeft: -125,
   },
-  usernameprompt: {
+  emailprompt: {
     top: '40%',
     marginTop: 65,
   },
@@ -98,15 +157,18 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  inputText: {
+  textInput: {
     position: 'absolute',
-    left: 11,
-    top: '50%',
-    transform: [{translateY: -9}],
-    color: "rgba(79, 86, 93, 0.8)",
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    paddingLeft: 11,
+    paddingRight: 11,
     fontFamily: FontFamily.interMedium,
     fontWeight: "500",
     fontSize: FontSize.size_sm,
+    color: "#333",
   },
   signUpButton: {
     position: 'absolute',
@@ -160,11 +222,11 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_sm,
   },
   welcome: {
-    position: 'absolute', // You still need this for absolute positioning
-    top: '50%',           // Centers the text vertically relative to the parent container
-    left: '50%',          // Centers horizontally
-    transform: [{ translateX: -100 }], // Adjusts the text to be perfectly centered horizontally
-    marginTop: -82,       // Fine-tune this for vertical centering if needed
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -100 }],
+    marginTop: -82,
     fontSize: 24,
     fontWeight: "700",
     fontFamily: FontFamily.interBold,
