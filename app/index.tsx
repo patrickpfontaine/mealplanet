@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+/*import { Text, View } from "react-native";
 
 export default function Index() {
   return (
@@ -12,4 +12,10 @@ export default function Index() {
       <Text>Edit app/index.tsx to edit this screen.</Text>
     </View>
   );
+}*/
+
+import { Redirect } from "expo-router";
+
+export default function Index() {
+  return <Redirect href="/SignIn" />;
 }
