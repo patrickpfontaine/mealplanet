@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 32,
         left: '50%',
-        //marginLeft: -72,
+        marginLeft: -30,
         top: '50%',
         marginTop: 165,
     },
