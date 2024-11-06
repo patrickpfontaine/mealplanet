@@ -37,7 +37,7 @@ const SignUp = () => {
         <Text style={styles.signInButtonText}>Sign In</Text>
       </Pressable>
 
-      <Text style={styles.welcome}>Welcome!</Text>
+      <Text style={styles.welcome}>Create an account!</Text>
       <Image 
         style={styles.logo} 
         resizeMode="cover" 
@@ -48,17 +48,17 @@ const SignUp = () => {
         <Image 
           style={styles.socialIcon} 
           resizeMode="cover" 
-          source={require("./apple1.png")} 
+          source={require("./google2.png")} 
         />
         <Image 
           style={styles.socialIcon} 
           resizeMode="cover" 
-          source={require("./facebook1.png")} 
+          source={require("./facebook2.png")} 
         />
         <Image 
           style={styles.socialIcon} 
           resizeMode="cover" 
-          source={require("./google1.png")} 
+          source={require("./apple2.png")} 
         />
       </View>
     </View>
@@ -82,15 +82,15 @@ const styles = StyleSheet.create({
   },
   usernameprompt: {
     top: '40%',
-    marginTop: -24,
+    marginTop: 65,
   },
   passwordprompt: {
     top: '40%',
-    marginTop: 27,
+    marginTop: 115,
   },
   confirmpasswordprompt: {
     top: '40%',
-    marginTop: 76,
+    marginTop: 165,
   },
   inputBackground: {
     backgroundColor: Color.colorLightsteelblue,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     left: '50%',
     marginLeft: -41.5,
     top: '50%',
-    marginTop: 102,
+    marginTop: 140,
   },
   buttonText: {
     color: "#fff",
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     left: '50%',
     marginLeft: -77.5,
     top: '50%',
-    marginTop: 238,
+    marginTop: 270,
     width: 157,
     height: 20,
     color: Color.colorGray,
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     left: '50%',
     marginLeft: -43.5,
     top: '50%',
-    marginTop: 267,
+    marginTop: 300,
   },
   signInButtonText: {
     color: Color.colorGray,
@@ -160,11 +160,11 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_sm,
   },
   welcome: {
-    position: 'absolute',
-    left: '50%',
-    marginLeft: -65.5,
-    top: '50%',
-    marginTop: -82,
+    position: 'absolute', // You still need this for absolute positioning
+    top: '50%',           // Centers the text vertically relative to the parent container
+    left: '50%',          // Centers horizontally
+    transform: [{ translateX: -100 }], // Adjusts the text to be perfectly centered horizontally
+    marginTop: -82,       // Fine-tune this for vertical centering if needed
     fontSize: 24,
     fontWeight: "700",
     fontFamily: FontFamily.interBold,
@@ -186,9 +186,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 32,
     left: '50%',
-    marginLeft: -72,
+    marginLeft: -103,
     top: '50%',
-    marginTop: 165,
+    marginTop: 200,
   },
   socialIcon: {
     width: 48,

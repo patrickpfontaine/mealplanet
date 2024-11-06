@@ -44,17 +44,17 @@ const SignIn = () => {
                 <Image 
                     style={styles.socialIcon} 
                     resizeMode="cover" 
-                    source={require("./apple1.png")} 
+                    source={require("./google2.png")} 
                 />
                 <Image 
                     style={styles.socialIcon} 
                     resizeMode="cover" 
-                    source={require("./facebook1.png")} 
+                    source={require("./facebook2.png")} 
                 />
                 <Image 
                     style={styles.socialIcon} 
                     resizeMode="cover" 
-                    source={require("./google1.png")} 
+                    source={require("./apple2.png")} 
                 />
             </View>
         </View>
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 32,
         left: '50%',
-        marginLeft: -90,
+        marginLeft: -103,
         top: '50%',
         marginTop: 165,
     },
