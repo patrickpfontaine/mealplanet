@@ -11,25 +11,33 @@ const SignIn = () => {
   	return (
     		<View style={styles.signIn}>
       			<View style={[styles.usernameprompt, styles.usernamepromptPosition]}>
-        				<View style={[styles.usernamepromptChild, styles.usernamepromptPosition]} />
-        				<Text style={[styles.username, styles.signTypo]}>Username</Text>
-      			</View>
-      			<View style={[styles.passwordprompt, styles.usernamepromptPosition]}>
-        				<View style={[styles.usernamepromptChild, styles.usernamepromptPosition]} />
-        				<Text style={[styles.password, styles.signTypo]}>Password</Text>
-      			</View>
-      			<View style={[styles.signinbutton, styles.signinbuttonPosition]}>
-        				<Pressable style={[styles.signinbuttonChild, styles.signinbuttonPosition]} onPress={()=>{}} />
-        				<Text style={[styles.signIn1, styles.signTypo]}>Sign in</Text>
-      			</View>
-      			<Text style={[styles.dontHaveAn, styles.signUpPosition]}>{`Don’t have an account?
-`}</Text>
-            <View style={[styles.signupbutton, styles.signupbuttonPosition]}>
-                <Pressable style={[styles.signupbuttonChild, styles.signupbuttonPosition]} onPress={()=>router.push('/SignUp')} />
-                <Text style={[styles.signUp, styles.signUpPosition]}>Sign up</Text>
-            </View>
+        		<View style={[styles.usernamepromptChild, styles.usernamepromptPosition]} />
+        		<Text style={[styles.username, styles.signTypo]}>Username</Text>
+      		</View>
+
+      		<View style={[styles.passwordprompt, styles.usernamepromptPosition]}>
+        		<View style={[styles.usernamepromptChild, styles.usernamepromptPosition]} />
+        			<Text style={[styles.password, styles.signTypo]}>Password</Text>
+      		</View>
+
+      		<Pressable 
+                style={styles.signInButton}
+                onPress={() => {}}>
+                <Text style={styles.buttonText}>Sign in</Text>
+            </Pressable>
+
+      		<Text style={[styles.dontHaveAn, styles.signUpPosition]}>{`Don’t have an account?`}</Text>
+
+            <Pressable 
+                style={styles.signUpButton}
+                onPress={() => router.push('/SignUp')}>
+                <Text style={styles.signUpButtonText}>Sign up</Text>
+            </Pressable>
+
             <Text style={[styles.welcome, styles.signUpPosition]}>Welcome!</Text>
+            
             <Image style={[styles.image1Icon, styles.signIn1Position]} resizeMode="cover" source={require("./logo.png")} />
+
         </View>);
 };
 
@@ -55,6 +63,25 @@ const styles = StyleSheet.create({
         top: "50%",
         position: "absolute"
     },
+    signInButton: {
+        position: 'absolute',
+        backgroundColor: "#1a3b5d",
+        borderRadius: 100,
+        height: 39,
+        width: 83,
+        justifyContent: 'center',
+        alignItems: 'center',
+        left: '50%',
+        marginLeft: -41.5,
+        top: '50%',
+        marginTop: 120,
+    },
+    buttonText: {
+        color: "#fff",
+        fontFamily: FontFamily.interMedium,
+        fontWeight: "500",
+        fontSize: FontSize.size_sm,
+    },
     signUpPosition: {
         color: Color.colorGray,
         left: "50%",
@@ -67,6 +94,25 @@ const styles = StyleSheet.create({
         left: "50%",
         top: "50%",
         position: "absolute"
+    },
+    signUpButton: {
+        position: 'absolute',
+        backgroundColor: "#90b766",
+        borderRadius: Border.br_3xs,
+        height: 26,
+        width: 88,
+        justifyContent: 'center',
+        alignItems: 'center',
+        left: '50%',
+        marginLeft: -43.5,
+        top: '50%',
+        marginTop: 250,
+    },
+    signUpButtonText: {
+        color: Color.colorGray,
+        fontFamily: FontFamily.interMedium,
+        fontWeight: "500",
+        fontSize: FontSize.size_sm,
     },
     signIn1Position: {
         left: "50%",
@@ -123,6 +169,7 @@ const styles = StyleSheet.create({
         left: "50%",
         top: "50%",
         position: "absolute"
+        
     },
     signinbutton: {
         marginTop: 120
