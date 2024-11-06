@@ -4,54 +4,56 @@ import { Border, Color, FontFamily, FontSize } from "./GlobalStyles";
 import { useRouter } from "expo-router";
 
 const CalendarPage = () => {
-    const router = useRouter();
   	
+    const router = useRouter();
+
   	return (
     		<View style={styles.calendarPage}>
-      			<View style={[styles.rectangleParent, styles.groupChildLayout2]}>
-        				<View style={[styles.groupChild, styles.groupChildPosition4]} />
-        				<View style={[styles.groupItem, styles.groupPosition1]} />
-        				<View style={[styles.groupInner, styles.groupPosition]} />
-        				<View style={[styles.rectangleView, styles.groupChildPosition3]} />
-        				<View style={[styles.groupChild1, styles.groupChildLayout]} />
-        				<View style={[styles.groupChild2, styles.groupChildPosition3]} />
-        				<View style={[styles.groupChild3, styles.groupChildPosition2]} />
-        				<View style={[styles.groupChild4, styles.groupChildPosition1]} />
-        				<View style={styles.sunParent}>
-          					<Text style={[styles.sun, styles.sunTypo]}>Sun</Text>
-          					<Text style={[styles.text, styles.textFlexBox]}>27</Text>
-          					<Text style={[styles.text1, styles.textFlexBox]}>28</Text>
-          					<Text style={[styles.text2, styles.textFlexBox]}>29</Text>
-          					<Text style={styles.text3}>30</Text>
-          					<Text style={[styles.text4, styles.textPosition]}>31</Text>
-          					<Text style={[styles.text5, styles.textPosition]}>1</Text>
-          					<Text style={[styles.text6, styles.textPosition]}>26</Text>
-          					<Text style={[styles.mon, styles.sunTypo]}>Mon</Text>
-          					<Text style={[styles.tue, styles.textPosition]}>Tue</Text>
-          					<Text style={[styles.thu, styles.sunTypo]}>Thu</Text>
-          					<Text style={[styles.wed, styles.textPosition1]}>Wed</Text>
-          					<Text style={[styles.fri, styles.sunTypo]}>Fri</Text>
-          					<Text style={[styles.sat, styles.sunTypo]}>Sat</Text>
-        				</View>
-        				<View style={[styles.groupChild5, styles.groupChildLayout]} />
-        				<View style={[styles.groupChild6, styles.groupChildPosition1]} />
-        				<View style={[styles.groupChild7, styles.groupChildPosition2]} />
-        				<View style={[styles.groupChild8, styles.groupChildLayout]} />
-        				<View style={[styles.groupChild9, styles.groupChildLayout]} />
-        				<View style={[styles.groupChild10, styles.groupChildPosition]} />
-        				<View style={[styles.groupChild11, styles.groupChildPosition]} />
-        				<Text style={[styles.creamyPestoChickenContainer, styles.creamyContainerLayout]}>
-          					<Text style={styles.creamyPestoChickenContainer1}>
-            						<Text style={[styles.creamyPestoChicken, styles.recipeTypo1]}>{`Creamy Pesto Chicken Pasta
-`}</Text>
+      		<View style={[styles.rectangleParent, styles.groupChildLayout2]}>
+        	<View style={[styles.groupChild, styles.groupChildPosition4]} />
+        	<View style={[styles.groupItem, styles.groupPosition1]} />
+        	<View style={[styles.groupInner, styles.groupPosition]} />
+        	<View style={[styles.rectangleView, styles.groupChildPosition3]} />
+        	<View style={[styles.groupChild1, styles.groupChildLayout]} />
+        	<View style={[styles.groupChild2, styles.groupChildPosition3]} />
+        	<View style={[styles.groupChild3, styles.groupChildPosition2]} />
+        	<View style={[styles.groupChild4, styles.groupChildPosition1]} />
+            
+        	<View style={styles.sunParent}>
+          	    <Text style={[styles.sun, styles.sunTypo]}>Sun</Text>
+          	    <Text style={[styles.text, styles.textFlexBox]}>27</Text>
+          	    <Text style={[styles.text1, styles.textFlexBox]}>28</Text>
+          	    <Text style={[styles.text2, styles.textFlexBox]}>29</Text>
+          	    <Text style={styles.text3}>30</Text>
+          	    <Text style={[styles.text4, styles.textPosition]}>31</Text>
+          	    <Text style={[styles.text5, styles.textPosition]}>1</Text>
+          	    <Text style={[styles.text6, styles.textPosition]}>26</Text>
+          	    <Text style={[styles.mon, styles.sunTypo]}>Mon</Text>
+          	    <Text style={[styles.tue, styles.textPosition]}>Tue</Text>
+          	    <Text style={[styles.thu, styles.sunTypo]}>Thu</Text>
+          	    <Text style={[styles.wed, styles.textPosition1]}>Wed</Text>
+          	    <Text style={[styles.fri, styles.sunTypo]}>Fri</Text>
+          	    <Text style={[styles.sat, styles.sunTypo]}>Sat</Text>
+        	</View>
+
+        	<View style={[styles.groupChild5, styles.groupChildLayout]} />
+        	<View style={[styles.groupChild6, styles.groupChildPosition1]} />
+        	<View style={[styles.groupChild7, styles.groupChildPosition2]} />
+        	<View style={[styles.groupChild8, styles.groupChildLayout]} />
+        	<View style={[styles.groupChild9, styles.groupChildLayout]} />
+        	<View style={[styles.groupChild10, styles.groupChildPosition]} />
+        	<View style={[styles.groupChild11, styles.groupChildPosition]} />
+        		<Text style={[styles.creamyPestoChickenContainer, styles.creamyContainerLayout]}>
+          	        <Text style={styles.creamyPestoChickenContainer1}>
+                        <Text style={styles.creamyPestoChicken}>{`Creamy Pesto Chicken Pasta`}</Text>
                         <Text style={styles.cookTime25}>Cook time: 25 min</Text>
                     </Text>
                 </Text>
                 <Pressable style={styles.delete} onPress={()=>{}}>
-                    <Image style={styles.icon} resizeMode="cover" source={require("./images/delete.png")}  />
+                    <Image style={styles.icon} resizeMode="cover" source={require("./images/add.png")} />
                 </Pressable>
                 <Pressable style={[styles.add, styles.addLayout]} onPress={()=>{}}>
-                    <Image style={styles.icon} resizeMode="cover" source={require("./images/add.png")}  />
+                    <Image style={styles.icon} resizeMode="cover" source={require("./images/add.png")} />
                 </Pressable>
                 <Pressable style={[styles.add1, styles.addLayout]} onPress={()=>{}}>
                     <Image style={styles.icon} resizeMode="cover" source={require("./images/add.png")} />
@@ -72,7 +74,7 @@ const CalendarPage = () => {
             <Image style={styles.taskbarIcon} resizeMode="cover" source={require("./images/taskbar.png")} />
             <View style={[styles.recipeButtonWrapper, styles.recipeLayout]}>
                 <View style={[styles.recipeButton, styles.recipeLayout]}>
-                    <Image style={[styles.recipeButtonChild, styles.groupChildPosition4]} resizeMode="cover" source={require("./images/google2.png")} />
+                    <Image style={styles.recipeButtonChild} resizeMode="cover" source={require("./images/google2.png")} />
                     <Text style={[styles.recipe, styles.recipeTypo]}>Recipe</Text>
                 </View>
             </View>
@@ -81,8 +83,10 @@ const CalendarPage = () => {
                 <View style={[styles.groupChild12, styles.groupLayout]} />
                 <Text style={[styles.tonightsDinner, styles.calendarTypo]}>Tonight’s Dinner!</Text>
                 <Image style={styles.imageIcon} resizeMode="cover" source={require("./images/pastapic.png")} />
-                <View style={[styles.groupChild13, styles.childLayout]} />
-                <Text style={[styles.recipe1, styles.recipeTypo]}>Recipe</Text>
+                <View style={[styles.recipebutton, styles.recipebuttonLayout]}>
+                    <View style={[styles.recipebuttonChild, styles.recipebuttonLayout]} />
+                    <Text style={[styles.recipe1, styles.recipeTypo]}>Recipe</Text>
+                </View>
                 <Text style={[styles.creamyPestoChickenContainer2, styles.creamyContainerLayout]}>
                     <Text style={styles.creamyPestoChickenContainer1}>
             						<Text style={styles.creamyPestoChicken1}>{`Creamy Pesto Chicken Pasta
@@ -90,19 +94,16 @@ const CalendarPage = () => {
                         <Text style={styles.cookTime25}>Cook time: 25 min</Text>
                     </Text>
                 </Text>
+                
             </View>
-            <View style={[styles.calendarPageChild, styles.childLayout]} />
 
-            <View style={styles.container}>
-
-            <Pressable 
-                style={styles.buttonStyle}
-                onPress={() => router.push("/SignIn")}  // Change the destination path as needed
-            >
-                 <Text style={styles.buttonText}>Group</Text>
+            <Pressable
+                 style={styles.topRightButton}
+                onPress={() => router.push("/SignIn")}
+                >
+            <Text style={styles.buttonText}>Group</Text>
             </Pressable>
 
-    </View>
         </View>);
 };
 
@@ -194,10 +195,6 @@ const styles = StyleSheet.create({
         display: "flex",
         position: "absolute"
     },
-    recipeTypo1: {
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500"
-    },
     addLayout: {
         height: 20,
         width: 20,
@@ -213,6 +210,8 @@ const styles = StyleSheet.create({
         color: Color.colorWhite,
         fontSize: FontSize.size_sm,
         textAlign: "left",
+        fontFamily: FontFamily.interMedium,
+        fontWeight: "500",
         position: "absolute"
     },
     calendarTypo: {
@@ -226,11 +225,9 @@ const styles = StyleSheet.create({
         width: 342,
         position: "absolute"
     },
-    childLayout: {
+    recipebuttonLayout: {
         height: 30,
-        width: 78,
-        backgroundColor: Color.colorDarkslategray_100,
-        borderRadius: Border.br_81xl,
+        width: 83,
         position: "absolute"
     },
     groupChild: {
@@ -443,7 +440,9 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: Border.br_3xs
     },
     creamyPestoChicken: {
-        fontSize: FontSize.size_base
+        fontSize: FontSize.size_base,
+        fontFamily: FontFamily.interMedium,
+        fontWeight: "500"
     },
     cookTime25: {
         fontStyle: "italic",
@@ -502,17 +501,18 @@ const styles = StyleSheet.create({
         position: "absolute"
     },
     recipeButtonChild: {
-        width: 83,
         height: 24,
         display: "none",
+        width: 83,
+        borderRadius: Border.br_base,
+        left: 0,
+        top: 0,
         position: "absolute"
     },
     recipe: {
         top: 3,
         left: 19,
-        display: "none",
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500"
+        display: "none"
     },
     recipeButton: {
         left: 0,
@@ -523,9 +523,9 @@ const styles = StyleSheet.create({
         left: 158
     },
     calendar: {
+        top: 57,
         left: 42,
         fontSize: 24,
-        top: 57,
         textAlign: "center"
     },
     groupChild12: {
@@ -548,20 +548,24 @@ const styles = StyleSheet.create({
         borderRadius: Border.br_3xs,
         position: "absolute"
     },
-    groupChild13: {
-        top: 79,
-        left: 143
+    recipebuttonChild: {
+        borderRadius: 100,
+        backgroundColor: "#1a3b5d",
+        left: 0,
+        top: 0
     },
     recipe1: {
-        top: 86,
-        left: 159,
+        top: 7,
+        left: 18,
         width: 46,
         height: 16,
         alignItems: "center",
         display: "flex",
-        color: Color.colorWhite,
-        fontFamily: FontFamily.interMedium,
-        fontWeight: "500"
+        color: Color.colorWhite
+    },
+    recipebutton: {
+        top: 79,
+        left: 143
     },
     creamyPestoChicken1: {
         fontFamily: FontFamily.interRegular,
@@ -575,46 +579,25 @@ const styles = StyleSheet.create({
         top: 100,
         left: 26
     },
-    calendarPageChild: {
-        left: 277,
-        top: 57
-    },
-    group: {
-        top: 63,
-        left: 295,
-        fontWeight: "600",
-        fontFamily: FontFamily.interSemiBold
-    },
     calendarPage: {
         backgroundColor: "#f3ede4",
-        borderStyle: "solid",
-        borderColor: "#000",
-        borderWidth: 1,
         flex: 1,
         height: 852,
         overflow: "hidden",
         width: "100%"
     },
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-end',  // Align to the top-right
-        marginTop: 20,  // Add top margin if needed
-        marginRight: 20,  // Add right margin if needed
-      },
-      buttonStyle: {
-        backgroundColor: '#4CAF50',  // Green background for button
-        paddingVertical: 10,  // Vertical padding to make the button taller
-        paddingHorizontal: 20,  // Horizontal padding for width
-        borderRadius: 5,  // Rounded corners
-        justifyContent: 'center',  // Vertically center the text
-        alignItems: 'center',  // Horizontally center the text
-      },
-      buttonText: {
-        color: 'white',  // White text color
-        fontSize: 16,  // Text size
-        fontWeight: 'bold',  // Bold text
-      }
+    topRightButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        backgroundColor: 'blue', // replace with your rectangle's color
+        padding: 10,
+        borderRadius: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+    }
 });
 
 export default CalendarPage;
