@@ -1,11 +1,13 @@
 import * as React from "react";
 import {StyleSheet, View, Text, Pressable, Image} from "react-native";
 import { FontFamily, FontSize, Color, Border } from "./GlobalStyles";
-//import logo from "./logo";
+import { useRouter } from "expo-router";
+
 
 
 const SignIn = () => {
-  	
+    const router = useRouter();
+
   	return (
     		<View style={styles.signIn}>
       			<View style={[styles.usernameprompt, styles.usernamepromptPosition]}>
@@ -23,7 +25,7 @@ const SignIn = () => {
       			<Text style={[styles.dontHaveAn, styles.signUpPosition]}>{`Don’t have an account?
 `}</Text>
             <View style={[styles.signupbutton, styles.signupbuttonPosition]}>
-                <Pressable style={[styles.signupbuttonChild, styles.signupbuttonPosition]} onPress={()=>{}} />
+                <Pressable style={[styles.signupbuttonChild, styles.signupbuttonPosition]} onPress={()=>router.push('/SignUp')} />
                 <Text style={[styles.signUp, styles.signUpPosition]}>Sign up</Text>
             </View>
             <Text style={[styles.welcome, styles.signUpPosition]}>Welcome!</Text>

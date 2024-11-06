@@ -16,14 +16,15 @@ export default function RootLayout() {
   const defaultScreenOptions = {
     headerShown: false,
     contentStyle: {
-      backgroundColor: "#f3ede4"
-    }
+      backgroundColor: "#f3ede4",
+    },
   };
 
   return (
     <Stack screenOptions={defaultScreenOptions}>
       <Stack.Screen name="index" />
       <Stack.Screen name="SignIn" />
+      <Stack.Screen name="SignUp" />
     </Stack>
   );
 }
