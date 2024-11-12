@@ -70,7 +70,7 @@ const CalendarPage = () => {
                     <Image style={styles.icon} resizeMode="cover" source={require("./images/add.png")} />
                 </Pressable>
             </View>
-            <Image style={styles.taskbarIcon} resizeMode="cover" source={require("./images/taskbar.png")} />
+            <Image style={styles.taskbarIcon} resizeMode="cover" source={require("./images/taskbarBox.png")} />
             <View style={[styles.recipeButtonWrapper, styles.recipeLayout]}>
                 <View style={[styles.recipeButton, styles.recipeLayout]}>
                     <Image style={styles.recipeButtonChild} resizeMode="cover" source={require("./images/google2.png")} />
@@ -580,4 +580,8 @@ const styles = StyleSheet.create({
 });
 
 export default CalendarPage;
+
+
+
+
 

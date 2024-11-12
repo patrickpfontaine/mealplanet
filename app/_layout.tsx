@@ -13,7 +13,7 @@ import { Stack } from "expo-router";
 
 export default function RootLayout() {
   const defaultScreenOptions = {
-    headerShown: false, // You can adjust this based on your needs
+    headerShown: false,
     contentStyle: {
       backgroundColor: "#f3ede4", // Global background style for content
     },
@@ -25,6 +25,7 @@ export default function RootLayout() {
       <Stack.Screen name="SignUp" />
       <Stack.Screen name="CalendarPage" />
       <Stack.Screen name="GroupPage" />
+      <Stack.Screen name="BCalendarPage" />
       {/* Add more screens here as your app grows */}
     </Stack>
   );

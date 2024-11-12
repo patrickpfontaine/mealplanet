@@ -16,7 +16,7 @@ const SignIn = () => {
         try {
             // Attempt to sign in with email and password
             await signInWithEmailAndPassword(auth, email, password);
-            router.push("/CalendarPage");  // Navigate to CalendarPage on success
+            router.push("/BCalendarPage");  // Navigate to CalendarPage on success
         } catch (error) {
             const e = error as Error;
             Alert.alert("Wrong Email or Password", e.message);  // Show error message if sign-in fails
@@ -53,8 +53,7 @@ const SignIn = () => {
             
             {/* Sign In Button */}
             <Pressable 
-                style={styles.signInButton}
-                onPress={handleSignIn}  // Call the handleSignIn function
+                style={styles.signInButton} onPress={handleSignIn}  // Call the handleSignIn function
             >
                 <Text style={styles.buttonText}>Sign in</Text>
             </Pressable>
