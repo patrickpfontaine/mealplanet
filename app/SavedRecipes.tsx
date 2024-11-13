@@ -55,11 +55,11 @@ const SavedRecipes: React.FC = () => {
         onPress={() => removeRecipe(item.id)} 
         style={styles.bookmarkButton}
       >
-        <FontAwesomeIcon 
-          icon={faBookmark} 
-          color="#B8C8A7" 
-          size={24} 
-        />
+        <Image
+              //style={styles.bookmarkButton}
+              resizeMode="cover"
+              source={require("./images/delete.png")}
+            />
       </TouchableOpacity>
     </View>
   );
@@ -188,8 +188,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   bookmarkButton: {
-    padding: 10,
+    padding: 20,
     justifyContent: "center",
+    alignItems: "center",
   },
   noRecipesContainer: {
     flex: 1,
