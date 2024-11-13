@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useNavigationContainerRef } from "@react-navigation/native";
 import { useRouter } from "expo-router";
-import { useRecipeContext } from "./config/RecipeContext";
+import { useRecipeContext } from "../config/RecipeContext";
 import { MealDisplayBox } from "@/components/MealDisplayBox";
 
 const RecipeSearch = () => {
@@ -76,7 +76,7 @@ const RecipeSearch = () => {
             <ThemedButton
               title="Saved"
               bookmark={true}
-              onPress={() => router.push("./SavedRecipes")}
+              onPress={() => router.push("/SavedRecipes")}
             ></ThemedButton>
           </View>
         </View>

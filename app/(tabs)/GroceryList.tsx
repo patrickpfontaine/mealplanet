@@ -19,7 +19,7 @@ import {
   faCross,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
-import { RecipeProvider } from "./config/RecipeContext";
+import { RecipeProvider } from "../config/RecipeContext";
 type GroceryItem = {
   id: string;
   name: string;

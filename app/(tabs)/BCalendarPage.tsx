@@ -10,7 +10,7 @@ import {
   Modal,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { Border, Color, FontFamily, FontSize } from "./GlobalStyles";
+import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 const DATES = ["27", "28", "29", "30", "31", "1", "26"] as const;
@@ -49,13 +49,13 @@ const EventCard: React.FC<EventCardProps> = ({
   onDelete,
 }) => {
   const dayBackgrounds = {
-    Sun: require("./images/SunColorBox.png"),
-    Mon: require("./images/MonColorBox.png"),
-    Tue: require("./images/TueColorBox.png"),
-    Wed: require("./images/WedColorBox.png"),
-    Thu: require("./images/ThuColorBox.png"),
-    Fri: require("./images/FriColorBox.png"),
-    Sat: require("./images/SatColorBox.png"),
+    Sun: require("../images/SunColorBox.png"),
+    Mon: require("../images/MonColorBox.png"),
+    Tue: require("../images/TueColorBox.png"),
+    Wed: require("../images/WedColorBox.png"),
+    Thu: require("../images/ThuColorBox.png"),
+    Fri: require("../images/FriColorBox.png"),
+    Sat: require("../images/SatColorBox.png"),
   };
 
   return (
@@ -78,7 +78,7 @@ const EventCard: React.FC<EventCardProps> = ({
             <Image
               style={styles.icon}
               resizeMode="cover"
-              source={require("./images/delete.png")}
+              source={require("../images/delete.png")}
             />
           </Pressable>
         </>
@@ -87,7 +87,7 @@ const EventCard: React.FC<EventCardProps> = ({
           <Image
             style={styles.icon}
             resizeMode="cover"
-            source={require("./images/add.png")}
+            source={require("../images/add.png")}
           />
         </Pressable>
       )}
@@ -101,7 +101,7 @@ const DinnerCard: React.FC = () => (
     <Image
       style={styles.dinnerImage}
       resizeMode="cover"
-      source={require("./images/pastapic.png")}
+      source={require("../images/pastapic.png")}
     />
     <View style={styles.recipeButton}>
       <Text style={[styles.buttonText, styles.groupButtonText]}>Recipe</Text>
