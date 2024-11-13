@@ -1,33 +1,104 @@
-/*import { Stack } from "expo-router";
+import { Stack, Tabs } from "expo-router";
+import { RecipeProvider } from "./config/RecipeContext";
+import { useFonts } from "expo-font";
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCalendar } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBasketShopping,
+  faBookBookmark,
+  faBookOpen,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function RootLayout() {
+  const [loaded] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    InterMedium: require("../assets/fonts/Inter_18pt-Medium.ttf"),
+    InterRegular: require("../assets/fonts/Inter_18pt-Regular.ttf"),
+    InterBold: require("../assets/fonts/Inter_24pt-Bold.ttf"),
+    InterLightItalic: require("../assets/fonts/Inter_18pt-LightItalic.ttf"),
+  });
   return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
-  );
-}*/
-
-
-import { Stack } from "expo-router";
-
-export default function RootLayout() {
-  const defaultScreenOptions = {
-    headerShown: false,
-    contentStyle: {
-      backgroundColor: "#f3ede4", // Global background style for content
-    },
-  };
-
-  return (
-    <Stack screenOptions={defaultScreenOptions}>
-      <Stack.Screen name="SignIn" />
-      <Stack.Screen name="SignUp" />
-      <Stack.Screen name="CalendarPage" />
-      <Stack.Screen name="GroupPage" />
-      <Stack.Screen name="BCalendarPage" />
-      {/* Add more screens here as your app grows */}
-    </Stack>
+    <RecipeProvider>
+      <Tabs
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: "#F3EDE4",
+            elevation: 0,
+            shadowOpacity: 0,
+            borderTopWidth: 0,
+          },
+        }}
+      >
+        <Tabs.Screen
+          name="BCalendarPage"
+          options={{
+            headerShown: false,
+            tabBarLabel: () => null,
+            tabBarActiveTintColor: "#306090",
+            tabBarInactiveTintColor: "gray",
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesomeIcon icon={faCalendar} color={color} size={size} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="GroceryList"
+          options={{
+            headerShown: false,
+            tabBarLabel: () => null,
+            tabBarActiveTintColor: "#306090",
+            tabBarInactiveTintColor: "gray",
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesomeIcon
+                icon={faBasketShopping}
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="RecipeSearch"
+          options={{
+            headerShown: false,
+            tabBarLabel: () => null,
+            tabBarActiveTintColor: "#306090",
+            tabBarInactiveTintColor: "gray",
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesomeIcon
+                icon={faBookBookmark}
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="SavedRecipes"
+          options={{ tabBarButton: () => null, headerShown: false }}
+        />
+        <Tabs.Screen
+          name="SignIn"
+          options={{ tabBarButton: () => null, headerShown: false }}
+        />
+        <Tabs.Screen
+          name="SignUp"
+          options={{ tabBarButton: () => null, headerShown: false }}
+        />
+        <Tabs.Screen
+          name="CalendarPage"
+          options={{ tabBarButton: () => null, headerShown: false }}
+        />
+        <Tabs.Screen
+          name="GroupPage"
+          options={{ tabBarButton: () => null, headerShown: false }}
+        />
+        <Tabs.Screen
+          name="index"
+          options={{ tabBarButton: () => null, headerShown: false }}
+        />
+      </Tabs>
+    </RecipeProvider>
   );
 }
-
