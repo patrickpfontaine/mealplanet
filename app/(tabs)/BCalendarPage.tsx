@@ -479,18 +479,23 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 80,
+    alignItems: 'center', // Center children horizontally
+    justifyContent: 'flex-end', // Align children to the bottom
   },
   taskbarBorder: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
+    width: 393, // Match the width of the content container
+    height: '100%',
   },
   taskbarContent: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    height: "100%",
+    position: 'absolute',
+    bottom: 0,
+    width: 393, // Match the width of the content container
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: '100%',
     paddingBottom: 10,
+    
   },
   taskbarIcon: {
     width: 50,
