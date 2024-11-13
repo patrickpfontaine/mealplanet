@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,154 +6,258 @@ import {
   StyleSheet,
   TextInput,
   Keyboard,
+  FlatList,
+  Image,
+  ActivityIndicator,
 } from "react-native";
 import Constants from "expo-constants";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ThemedButton } from "@/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useNavigationContainerRef } from "@react-navigation/native";
+import { faMagnifyingGlass, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
 import { useRecipeContext } from "../config/RecipeContext";
-import { MealDisplayBox } from "@/components/MealDisplayBox";
+import { RECIPE_API_KEY } from '../config/RecipeAPIconfig'; // Import the API key
+
+
+interface Recipe {
+  id: number;
+  title: string;
+  image: string;
+  readyInMinutes: number;
+  servings: number;
+}
 
 const RecipeSearch = () => {
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe[]>([]);
-  const [searchQuery, setSearchQuery] = useState(""); // State to hold the search term
-  const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
-  const { addRecipe } = useRecipeContext();
-  const { removeRecipe, recipeSearch } = useRecipeContext();
-
+  const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { addRecipe, removeRecipe, recipeSearch } = useRecipeContext();
   const router = useRouter();
-  const apiKey = Constants.expoConfig?.extra?.RECIPE_API_KEY;
+  const apiKey = RECIPE_API_KEY;
 
   const handleSearch = async () => {
-    try {
-      fetchRecipes(searchQuery);
-      Keyboard.dismiss();
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    if (!searchQuery.trim()) {
+      setError("Please enter a search query");
+      return;
     }
-  };
 
-  const fetchRecipes = async (query: string) => {
-    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${apiKey}&addRecipeInformation=true`;
+    setLoading(true);
+    setError(null);
+    setRecipes([]);
+    Keyboard.dismiss();
 
     try {
-      setLoading(true); // Start loading
+      const url = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(searchQuery)}&apiKey=${apiKey}&addRecipeInformation=true`;
+      console.log("Fetching from URL:", url);
+      
       const response = await fetch(url);
       const data = await response.json();
-      setRecipes(data.results); // Update state with fetched recipes
+      
+      console.log("API Response:", JSON.stringify(data, null, 2));
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch recipes");
+      }
+
+      if (data.results && Array.isArray(data.results)) {
+        setRecipes(data.results);
+        if (data.results.length === 0) {
+          setError("No recipes found. Try a different search term.");
+        }
+      } else {
+        throw new Error("Invalid data format received from API");
+      }
     } catch (err: any) {
       console.error("Error fetching recipes:", err);
-      setError(err.message); // Set error message
+      setError(err.message || "An unexpected error occurred");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
+  const toggleSaveRecipe = (recipe: Recipe) => {
+    if (recipeSearch(recipe.id)) {
+      removeRecipe(recipe.id);
+    } else {
+      addRecipe(recipe);
+    }
+  };
+
+  const renderRecipeItem = ({ item }: { item: Recipe }) => (
+    <View style={styles.recipeDisplayContainer}>
+      <Image 
+        source={{ uri: item.image }} 
+        style={styles.image} 
+        onError={(e) => console.log("Image loading error:", e.nativeEvent.error)}
+      />
+      <View style={styles.recipeInfo}>
+        <Text style={styles.recipeTitle}>{item.title}</Text>
+        <Text style={styles.recipeSubtext1}>Ready in {item.readyInMinutes} minutes</Text>
+        <Text style={styles.recipeSubtext2}>Servings: {item.servings}</Text>
+      </View>
+      <TouchableOpacity onPress={() => toggleSaveRecipe(item)} style={styles.bookmarkButton}>
+        <FontAwesomeIcon 
+          icon={faBookmark} 
+          color={recipeSearch(item.id) ? "#B8C8A7" : "#222222"} 
+          size={24} 
+        />
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
-    <SafeAreaProvider
-      style={{ padding: 20, backgroundColor: "rgba(243, 237, 228, 1)" }}
-    >
-      <SafeAreaView>
-        <View style={{ flexDirection: "row" }}>
-          <Text
-            style={{
-              fontFamily: "InterBold",
-              fontSize: 24,
-              color: "#222222",
-              paddingBottom: 10,
-            }}
-          >
-            Recipe Search
-          </Text>
-          <View style={{ alignItems: "flex-end", flex: 1.5, paddingRight: 8 }}>
-            <ThemedButton
-              title="Saved"
-              bookmark={true}
-              onPress={() => router.push("/SavedRecipes")}
-            ></ThemedButton>
-          </View>
+    <SafeAreaProvider style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Recipe Search</Text>
+          <ThemedButton
+            title="Saved"
+            bookmark={true}
+            onPress={() => router.push("/SavedRecipes")}
+          />
         </View>
-        <View style={styles.input}>
+        <View style={styles.searchContainer}>
           <TouchableOpacity onPress={handleSearch}>
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
               color="#222222"
-              style={{ margin: 6, marginRight: 6 }}
-            ></FontAwesomeIcon>
+              style={styles.searchIcon}
+            />
           </TouchableOpacity>
           <TextInput
+            style={styles.input}
             onChangeText={setSearchQuery}
             value={searchQuery}
             onSubmitEditing={handleSearch}
             placeholder="Search for a recipe"
             placeholderTextColor="#555555"
-          ></TextInput>
+          />
         </View>
-        <View style={{ paddingBottom: 25 }}></View>
-        <MealDisplayBox recipes={recipes}></MealDisplayBox>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#B8C8A7" />
+            <Text style={styles.loadingText}>Loading recipes...</Text>
+          </View>
+        )}
+        {error && <Text style={styles.errorText}>{error}</Text>}
+        {!loading && !error && recipes.length > 0 && (
+          <FlatList
+            data={recipes}
+            renderItem={renderRecipeItem}
+            keyExtractor={(item) => item.id.toString()}
+            style={styles.recipeList}
+          />
+        )}
+        {!loading && !error && recipes.length === 0 && searchQuery && (
+          <Text style={styles.noResultsText}>No recipes found. Try a different search term.</Text>
+        )}
       </SafeAreaView>
     </SafeAreaProvider>
   );
 };
 
-export default RecipeSearch;
-
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "rgba(243, 237, 228, 1)",
+  },
+  safeArea: {
+    flex: 1,
+    padding: 20,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  title: {
+    fontFamily: "InterBold",
+    fontSize: 24,
+    color: "#222222",
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(212, 206, 195, 1)",
+    borderRadius: 24,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    padding: 10,
+    fontFamily: "InterRegular",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 10,
+    fontFamily: "InterRegular",
+    fontSize: 16,
+    color: "#222222",
+  },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginVertical: 20,
+    fontFamily: "InterRegular",
+    fontSize: 16,
+  },
+  noResultsText: {
+    textAlign: "center",
+    marginVertical: 20,
+    fontFamily: "InterRegular",
+    fontSize: 16,
+    color: "#222222",
+  },
+  recipeList: {
+    flex: 1,
+  },
   recipeDisplayContainer: {
     backgroundColor: "rgba(184, 200, 167, 1)",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    //alignItems: "center",
+    flexDirection: "row",
     borderRadius: 16,
-    padding: 10,
+    marginBottom: 15,
+    overflow: "hidden",
   },
   image: {
     width: 130,
-    height: 96,
-    marginTop: 4,
-    borderRadius: 10,
-    justifyContent: "flex-end",
-    alignItems: "center",
+    height: 130,
+  },
+  recipeInfo: {
+    flex: 1,
+    padding: 10,
   },
   recipeTitle: {
-    flexShrink: 0,
-    textAlign: "left",
     color: "rgba(34, 34, 34, 1)",
     fontFamily: "InterMedium",
     fontSize: 16,
-    padding: 4,
-    maxWidth: "90%",
+    marginBottom: 5,
   },
   recipeSubtext1: {
-    textAlign: "left",
     color: "rgba(34, 34, 34, 1)",
-    marginTop: 10,
     fontFamily: "InterLightItalic",
     fontSize: 12,
+    marginBottom: 2,
   },
   recipeSubtext2: {
-    textAlign: "left",
     color: "rgba(34, 34, 34, 1)",
     fontFamily: "InterLightItalic",
     fontSize: 12,
-    marginTop: 4,
   },
-  input: {
+  bookmarkButton: {
     padding: 10,
-    backgroundColor: "rgba(212, 206, 195, 1)",
-    borderRadius: 24,
-    flexDirection: "row",
-    fontFamily: "InterRegular",
+    justifyContent: "center",
   },
 });
 
-interface Recipe {
-  id: number;
-}
+export default RecipeSearch;
