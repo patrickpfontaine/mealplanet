@@ -337,14 +337,7 @@ const GroupPage = () => {
           </View>
         </Pressable>
       </View>
-
-      <View style={styles.taskbarContainer}>
-        <Image 
-          style={styles.taskbar} 
-          resizeMode="cover" 
-          source={require("./images/taskbarBox.png")} 
-        />
-      </View>
+      
     </SafeAreaView>
   );
 };
