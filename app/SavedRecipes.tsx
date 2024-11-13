@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,154 +6,202 @@ import {
   StyleSheet,
   TextInput,
   Keyboard,
+  FlatList,
+  Image,
+  ListRenderItem,
 } from "react-native";
-import Constants from "expo-constants";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ThemedButton } from "@/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useNavigationContainerRef } from "@react-navigation/native";
+import { faMagnifyingGlass, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
 import { useRecipeContext } from "./config/RecipeContext";
-import { MealDisplayBox } from "@/components/MealDisplayBox";
 
-const Saved = () => {
-  const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe[]>([]);
-  const [searchQuery, setSearchQuery] = useState(""); // State to hold the search term
-  const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
-  const { addRecipe } = useRecipeContext();
-  const { removeRecipe, recipeSearch } = useRecipeContext();
+interface Recipe {
+  id: number;
+  title: string;
+  image: string;
+  readyInMinutes: number;
+  servings: number;
+}
 
+const SavedRecipes: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const { savedRecipes, removeRecipe } = useRecipeContext();
   const router = useRouter();
-  const apiKey = Constants.expoConfig?.extra?.RECIPE_API_KEY;
 
-  const handleSearch = async () => {
-    try {
-      fetchRecipes(searchQuery);
-      Keyboard.dismiss();
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  // Filter saved recipes based on search query
+  const filteredRecipes = savedRecipes.filter((recipe) =>
+    recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSearch = () => {
+    Keyboard.dismiss();
   };
 
-  const fetchRecipes = async (query: string) => {
-    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${apiKey}&addRecipeInformation=true`;
-
-    try {
-      setLoading(true); // Start loading
-      const response = await fetch(url);
-      const data = await response.json();
-      setRecipes(data.results); // Update state with fetched recipes
-    } catch (err: any) {
-      console.error("Error fetching recipes:", err);
-      setError(err.message); // Set error message
-    } finally {
-      setLoading(false); // Stop loading
-    }
-  };
+  const renderRecipeItem: ListRenderItem<Recipe> = ({ item }) => (
+    <View style={styles.recipeDisplayContainer}>
+      <Image 
+        source={{ uri: item.image }} 
+        style={styles.image}
+        onError={(e) => console.log("Image loading error:", e.nativeEvent.error)}
+      />
+      <View style={styles.recipeInfo}>
+        <Text style={styles.recipeTitle}>{item.title}</Text>
+        <Text style={styles.recipeSubtext1}>Ready in {item.readyInMinutes} minutes</Text>
+        <Text style={styles.recipeSubtext2}>Servings: {item.servings}</Text>
+      </View>
+      <TouchableOpacity 
+        onPress={() => removeRecipe(item.id)} 
+        style={styles.bookmarkButton}
+      >
+        <FontAwesomeIcon 
+          icon={faBookmark} 
+          color="#B8C8A7" 
+          size={24} 
+        />
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
-    <SafeAreaProvider
-      style={{ padding: 20, backgroundColor: "rgba(243, 237, 228, 1)" }}
-    >
-      <SafeAreaView>
-        <View style={{ flexDirection: "row" }}>
-          <Text
-            style={{
-              fontFamily: "InterBold",
-              fontSize: 24,
-              color: "#222222",
-              paddingBottom: 10,
-            }}
-          >
-            Saved Recipes
-          </Text>
-          <View style={{ alignItems: "flex-end", flex: 1.5, paddingRight: 8 }}>
-            <ThemedButton
-              title="Saved"
-              bookmark={true}
-              //onPress={() => router.push({ pathname: "/home" })}
-            ></ThemedButton>
-          </View>
+    <SafeAreaProvider style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Saved Recipes</Text>
+          <ThemedButton
+            title="Search"
+            bookmark={false}
+            onPress={() => router.push("/RecipeSearch")}
+          />
         </View>
-        <View style={styles.input}>
+        
+        <View style={styles.searchContainer}>
           <TouchableOpacity onPress={handleSearch}>
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
               color="#222222"
-              style={{ margin: 6, marginRight: 6 }}
-            ></FontAwesomeIcon>
+              style={styles.searchIcon}
+            />
           </TouchableOpacity>
           <TextInput
+            style={styles.input}
             onChangeText={setSearchQuery}
             value={searchQuery}
             onSubmitEditing={handleSearch}
-            placeholder="Search for a recipe"
+            placeholder="Search saved recipes"
             placeholderTextColor="#555555"
-          ></TextInput>
+          />
         </View>
-        <View style={{ paddingBottom: 25 }}></View>
-        <MealDisplayBox recipes={recipes}></MealDisplayBox>
+
+        {filteredRecipes.length === 0 ? (
+          <View style={styles.noRecipesContainer}>
+            <Text style={styles.noRecipesText}>
+              {searchQuery 
+                ? "No saved recipes match your search"
+                : "No saved recipes yet. Try saving some recipes from the search page!"}
+            </Text>
+          </View>
+        ) : (
+          <FlatList<Recipe>
+            data={filteredRecipes}
+            renderItem={renderRecipeItem}
+            keyExtractor={(item) => item.id.toString()}
+            style={styles.recipeList}
+          />
+        )}
       </SafeAreaView>
     </SafeAreaProvider>
   );
 };
 
-export default Saved;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "rgba(243, 237, 228, 1)",
+  },
+  safeArea: {
+    flex: 1,
+    padding: 20,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  title: {
+    fontFamily: "InterBold",
+    fontSize: 24,
+    color: "#222222",
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(212, 206, 195, 1)",
+    borderRadius: 24,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    padding: 10,
+    fontFamily: "InterRegular",
+  },
+  recipeList: {
+    flex: 1,
+  },
   recipeDisplayContainer: {
     backgroundColor: "rgba(184, 200, 167, 1)",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    //alignItems: "center",
+    flexDirection: "row",
     borderRadius: 16,
-    padding: 10,
+    marginBottom: 15,
+    overflow: "hidden",
   },
   image: {
     width: 130,
-    height: 96,
-    marginTop: 4,
-    borderRadius: 10,
-    justifyContent: "flex-end",
-    alignItems: "center",
+    height: 130,
+  },
+  recipeInfo: {
+    flex: 1,
+    padding: 10,
   },
   recipeTitle: {
-    flexShrink: 0,
-    textAlign: "left",
     color: "rgba(34, 34, 34, 1)",
     fontFamily: "InterMedium",
     fontSize: 16,
-    padding: 4,
-    maxWidth: "90%",
+    marginBottom: 5,
   },
   recipeSubtext1: {
-    textAlign: "left",
     color: "rgba(34, 34, 34, 1)",
-    marginTop: 10,
     fontFamily: "InterLightItalic",
     fontSize: 12,
+    marginBottom: 2,
   },
   recipeSubtext2: {
-    textAlign: "left",
     color: "rgba(34, 34, 34, 1)",
     fontFamily: "InterLightItalic",
     fontSize: 12,
-    marginTop: 4,
   },
-  input: {
+  bookmarkButton: {
     padding: 10,
-    backgroundColor: "rgba(212, 206, 195, 1)",
-    borderRadius: 24,
-    flexDirection: "row",
+    justifyContent: "center",
+  },
+  noRecipesContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noRecipesText: {
     fontFamily: "InterRegular",
+    fontSize: 16,
+    color: "#222222",
+    textAlign: "center",
   },
 });
 
-interface Recipe {
-  id: number;
-}
+export default SavedRecipes;

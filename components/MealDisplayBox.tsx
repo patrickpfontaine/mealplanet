@@ -14,7 +14,7 @@ import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons";
 import {
   RecipeProvider,
   useRecipeContext,
-} from "../app/config/RecipeContext.js";
+} from "../app/config/RecipeContext";
 import { ThemedButton } from "./Button";
 
 interface MealDisplayBoxProps {
