@@ -1,33 +1,31 @@
-/*import { Stack } from "expo-router";
-
-export default function RootLayout() {
-  return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
-  );
-}*/
-
-
 import { Stack } from "expo-router";
+import { RecipeProvider } from "./config/RecipeContext";
+import { useFonts } from "expo-font";
 
 export default function RootLayout() {
-  const defaultScreenOptions = {
-    headerShown: false,
-    contentStyle: {
-      backgroundColor: "#f3ede4", // Global background style for content
-    },
-  };
+  const [loaded] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    InterMedium: require("../assets/fonts/Inter_18pt-Medium.ttf"),
+    InterRegular: require("../assets/fonts/Inter_18pt-Regular.ttf"),
+    InterBold: require("../assets/fonts/Inter_24pt-Bold.ttf"),
+    InterLightItalic: require("../assets/fonts/Inter_18pt-LightItalic.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  }
 
   return (
-    <Stack screenOptions={defaultScreenOptions}>
-      <Stack.Screen name="SignIn" />
-      <Stack.Screen name="SignUp" />
-      <Stack.Screen name="CalendarPage" />
-      <Stack.Screen name="GroupPage" />
-      <Stack.Screen name="BCalendarPage" />
-      {/* Add more screens here as your app grows */}
-    </Stack>
+    <RecipeProvider>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="SavedRecipes" options={{ headerShown: false }} />
+        <Stack.Screen name="SignIn" options={{ headerShown: false }} />
+        <Stack.Screen name="SignUp" options={{ headerShown: false }} />
+        <Stack.Screen name="CalendarPage" options={{ headerShown: false }} />
+        <Stack.Screen name="GroupPage" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+      </Stack>
+    </RecipeProvider>
   );
 }
-

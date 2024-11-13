@@ -26,7 +26,7 @@ const SignUp = () => {
       console.log("User created:", userCredential.user);
 
       // Navigate to the next page (you can modify this path)
-      router.push("/CalendarPage"); 
+      router.push("/(tabs)/BCalendarPage"); 
     } catch (error) {
       // Type assertion to treat 'error' as an instance of Error
       const e = error as Error;

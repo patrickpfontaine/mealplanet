@@ -16,7 +16,7 @@ const SignIn = () => {
         try {
             // Attempt to sign in with email and password
             await signInWithEmailAndPassword(auth, email, password);
-            router.push("/BCalendarPage");  // Navigate to CalendarPage on success
+            router.push("/(tabs)/BCalendarPage");  // Navigate to CalendarPage on success
         } catch (error) {
             const e = error as Error;
             Alert.alert("Wrong Email or Password", e.message);  // Show error message if sign-in fails
