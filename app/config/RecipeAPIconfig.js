@@ -1,0 +1,1 @@
+export const RECIPE_API_KEY = 'e447ee1e3fef438db0e5b2b384d068c9';

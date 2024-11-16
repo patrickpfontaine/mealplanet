@@ -1,13 +1,23 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Image, Pressable, SafeAreaView, ScrollView, Modal } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Modal,
+} from "react-native";
 import { useRouter } from "expo-router";
-import { Border, Color, FontFamily, FontSize } from "./GlobalStyles";
+import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
+import { ThemedButton } from "@/components/Button";
 
-const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
-const DATES = ['27', '28', '29', '30', '31', '1', '26'] as const;
+const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
+const DATES = ["27", "28", "29", "30", "31", "1", "26"] as const;
 
-type DayOfWeek = typeof DAYS_OF_WEEK[number];
-type Date = typeof DATES[number];
+type DayOfWeek = (typeof DAYS_OF_WEEK)[number];
+type Date = (typeof DATES)[number];
 
 interface CalendarDayProps {
   day: DayOfWeek;
@@ -31,20 +41,27 @@ interface EventCardProps {
   onDelete?: () => void;
 }
 
-const EventCard: React.FC<EventCardProps> = ({ day, top, title, time, onAdd, onDelete }) => {
+const EventCard: React.FC<EventCardProps> = ({
+  day,
+  top,
+  title,
+  time,
+  onAdd,
+  onDelete,
+}) => {
   const dayBackgrounds = {
-    Sun: require("./images/SunColorBox.png"),
-    Mon: require("./images/MonColorBox.png"),
-    Tue: require("./images/TueColorBox.png"),
-    Wed: require("./images/WedColorBox.png"),
-    Thu: require("./images/ThuColorBox.png"),
-    Fri: require("./images/FriColorBox.png"),
-    Sat: require("./images/SatColorBox.png"),
+    Sun: require("../images/SunColorBox.png"),
+    Mon: require("../images/MonColorBox.png"),
+    Tue: require("../images/TueColorBox.png"),
+    Wed: require("../images/WedColorBox.png"),
+    Thu: require("../images/ThuColorBox.png"),
+    Fri: require("../images/FriColorBox.png"),
+    Sat: require("../images/SatColorBox.png"),
   };
 
   return (
     <View style={[styles.eventContainer, { top }]}>
-      <Image 
+      <Image
         style={styles.eventBackground}
         resizeMode="cover"
         source={dayBackgrounds[day]}
@@ -52,16 +69,27 @@ const EventCard: React.FC<EventCardProps> = ({ day, top, title, time, onAdd, onD
       {title && time ? (
         <>
           <Text style={styles.eventText}>
-            <Text style={styles.eventTitle}>{title}{'\n'}</Text>
+            <Text style={styles.eventTitle}>
+              {title}
+              {"\n"}
+            </Text>
             <Text style={styles.eventTime}>{time}</Text>
           </Text>
           <Pressable style={styles.actionButton} onPress={onDelete}>
-            <Image style={styles.icon} resizeMode="cover" source={require("./images/delete.png")} />
+            <Image
+              style={styles.icon}
+              resizeMode="cover"
+              source={require("../images/delete.png")}
+            />
           </Pressable>
         </>
       ) : (
         <Pressable style={styles.actionButton} onPress={onAdd}>
-          <Image style={styles.icon} resizeMode="cover" source={require("./images/add.png")} />
+          <Image
+            style={styles.icon}
+            resizeMode="cover"
+            source={require("../images/add.png")}
+          />
         </Pressable>
       )}
     </View>
@@ -71,26 +99,38 @@ const EventCard: React.FC<EventCardProps> = ({ day, top, title, time, onAdd, onD
 const DinnerCard: React.FC = () => (
   <View style={styles.dinnerCard}>
     <Text style={styles.tonightsDinner}>Tonight's Dinner!</Text>
-    <Image style={styles.dinnerImage} resizeMode="cover" source={require("./images/pastapic.png")} />
+    <Image
+      style={styles.dinnerImage}
+      resizeMode="cover"
+      source={require("../images/pastapic.png")}
+    />
     <View style={styles.recipeButton}>
-    <Text style={[styles.buttonText, styles.groupButtonText]}>Recipe</Text>
+      <ThemedButton title="Recipe"></ThemedButton>
     </View>
     <Text style={styles.dinnerDescription}>
-      <Text style={styles.dinnerTitle}>Creamy Pesto Chicken Pasta{'\n'}</Text>
+      <Text style={styles.dinnerTitle}>Creamy Pesto Chicken Pasta{"\n"}</Text>
       <Text style={styles.cookTime}>Cook time: 25 min</Text>
     </Text>
   </View>
 );
 
-const DeleteRecipe: React.FC<{ onClose: () => void, onConfirm: () => void }> = ({ onClose, onConfirm }) => {
+const DeleteRecipe: React.FC<{
+  onClose: () => void;
+  onConfirm: () => void;
+}> = ({ onClose, onConfirm }) => {
   return (
     <View style={styles.deleteRecipe2}>
-      <Text style={styles.areYouSure}>Are you sure you want to delete this recipe?</Text>
+      <Text style={styles.areYouSure}>
+        Are you sure you want to delete this recipe?
+      </Text>
       <View style={styles.buttonContainer}>
         <Pressable style={[styles.button, styles.noButton]} onPress={onClose}>
           <Text style={[styles.buttonText, styles.noButtonText]}>No</Text>
         </Pressable>
-        <Pressable style={[styles.button, styles.yesButton]} onPress={onConfirm}>
+        <Pressable
+          style={[styles.button, styles.yesButton]}
+          onPress={onConfirm}
+        >
           <Text style={[styles.buttonText, styles.yesButtonText]}>Yes</Text>
         </Pressable>
       </View>
@@ -98,16 +138,27 @@ const DeleteRecipe: React.FC<{ onClose: () => void, onConfirm: () => void }> = (
   );
 };
 
-const TaskbarIcon: React.FC<{ source: any; onPress: () => void }> = ({ source, onPress }) => (
+const TaskbarIcon: React.FC<{ source: any; onPress: () => void }> = ({
+  source,
+  onPress,
+}) => (
   <Pressable style={styles.taskbarIcon} onPress={onPress}>
-    <Image source={source} style={styles.taskbarIconImage} resizeMode="contain" />
+    <Image
+      source={source}
+      style={styles.taskbarIconImage}
+      resizeMode="contain"
+    />
   </Pressable>
 );
 
 const CalendarPage: React.FC = () => {
   const router = useRouter();
   const [events, setEvents] = useState([
-    { day: 'Sun' as DayOfWeek, title: "Creamy Pesto Chicken Pasta", time: "Cook time: 25 min" },
+    {
+      day: "Sun" as DayOfWeek,
+      title: "Creamy Pesto Chicken Pasta",
+      time: "Cook time: 25 min",
+    },
   ]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState<DayOfWeek | null>(null);
@@ -124,7 +175,7 @@ const CalendarPage: React.FC = () => {
 
   const confirmDelete = () => {
     if (selectedDay) {
-      setEvents(events.filter(event => event.day !== selectedDay));
+      setEvents(events.filter((event) => event.day !== selectedDay));
     }
     setShowDeleteModal(false);
     setSelectedDay(null);
@@ -134,24 +185,28 @@ const CalendarPage: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.contentContainer}>
-          <Text style={styles.pageTitle}>Calendar</Text>
-          <Pressable 
-            style={styles.groupButton}
-            onPress={() => router.push("/GroupPage")}
-          >
-            <Text style={[styles.buttonText, styles.groupButtonText]}>Group</Text>
-          </Pressable>
-
+          <View style={styles.header}>
+            <Text style={styles.pageTitle}>Calendar</Text>
+            <ThemedButton
+              title="Group"
+              onPress={() => router.push("/GroupPage")}
+            ></ThemedButton>
+          </View>
           <DinnerCard />
 
           <View style={styles.calendarContainer}>
             <View style={styles.daysContainer}>
               {DAYS_OF_WEEK.map((day, index) => (
-                <CalendarDay key={day} day={day} date={DATES[index]} top={index * 75 + 30} />
+                <CalendarDay
+                  key={day}
+                  day={day}
+                  date={DATES[index]}
+                  top={index * 75 + 30}
+                />
               ))}
             </View>
             {DAYS_OF_WEEK.map((day, index) => {
-              const event = events.find(e => e.day === day);
+              const event = events.find((e) => e.day === day);
               return (
                 <EventCard
                   key={day}
@@ -168,7 +223,7 @@ const CalendarPage: React.FC = () => {
         </View>
       </ScrollView>
 
-      <View style={styles.taskbarContainer}>
+      {/* <View style={styles.taskbarContainer}>
         <Image 
           source={require("./images/taskbarBox.png")} 
           style={styles.taskbarBorder} 
@@ -188,15 +243,14 @@ const CalendarPage: React.FC = () => {
             onPress={() => router.push("/BCalendarPage")}
           />
         </View>
-      </View>
-      
-      <Modal
-        visible={showDeleteModal}
-        transparent={true}
-        animationType="fade"
-      >
+      </View> */}
+
+      <Modal visible={showDeleteModal} transparent={true} animationType="fade">
         <View style={styles.modalOverlay}>
-          <DeleteRecipe onClose={() => setShowDeleteModal(false)} onConfirm={confirmDelete} />
+          <DeleteRecipe
+            onClose={() => setShowDeleteModal(false)}
+            onConfirm={confirmDelete}
+          />
         </View>
       </Modal>
     </SafeAreaView>
@@ -210,30 +264,22 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   contentContainer: {
     width: 342,
-    alignItems: 'center',
+    alignItems: "center",
   },
   pageTitle: {
-    fontFamily: FontFamily.interBold,
-    fontWeight: "700",
+    fontFamily: "InterBold",
     fontSize: 24,
-    color: Color.colorGray,
-    marginTop: 57,
-    alignSelf: 'flex-start',
+    color: "#222222",
   },
-  groupButton: {
-    position: "absolute",
-    right: 0,
-    top: 57,
-    width: 83,
-    height: 30,
-    borderRadius: Border.br_81xl,
-    backgroundColor: Color.colorDarkslategray_100,
-    justifyContent: 'center',
-    alignItems: 'center',
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
   },
   buttonText: {
     fontFamily: FontFamily.interSemiBold,
@@ -273,8 +319,8 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: Border.br_81xl,
     backgroundColor: Color.colorDarkslategray_100,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   dinnerDescription: {
     position: "absolute",
@@ -312,7 +358,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     width: 28,
-    alignItems: 'center',
+    alignItems: "center",
   },
   dayText: {
     color: Color.colorGainsboro,
@@ -331,16 +377,16 @@ const styles = StyleSheet.create({
     left: 48,
     width: 280,
     height: 66,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   eventBackground: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+    position: "absolute",
+    width: "100%",
+    height: "100%",
     borderRadius: Border.br_3xs,
   },
   eventText: {
-    position: 'absolute',
+    position: "absolute",
     left: 25,
     top: 10,
     width: 196,
@@ -370,9 +416,9 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   deleteRecipe2: {
     borderRadius: 24,
@@ -380,8 +426,8 @@ const styles = StyleSheet.create({
     width: 300,
     height: 169,
     overflow: "hidden",
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   areYouSure: {
     fontSize: 16,
@@ -392,16 +438,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '80%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
   },
   button: {
     width: 100,
     height: 40,
     borderRadius: Border.br_81xl,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   noButton: {
     backgroundColor: Color.colorWhite,
@@ -418,38 +464,37 @@ const styles = StyleSheet.create({
     color: Color.colorWhite,
   },
   taskbarContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
     height: 80,
-    alignItems: 'center', // Center children horizontally
-    justifyContent: 'flex-end', // Align children to the bottom
+    alignItems: "center", // Center children horizontally
+    justifyContent: "flex-end", // Align children to the bottom
   },
   taskbarBorder: {
     width: 393, // Match the width of the content container
-    height: '100%',
+    height: "100%",
   },
   taskbarContent: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     width: 393, // Match the width of the content container
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    height: "100%",
     paddingBottom: 10,
-    
   },
   taskbarIcon: {
     width: 50,
     height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   taskbarIconImage: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
 });
 
