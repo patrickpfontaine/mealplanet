@@ -54,11 +54,7 @@ export default function TabsLayout() {
           tabBarActiveTintColor: "#306090",
           tabBarInactiveTintColor: "gray",
           tabBarIcon: ({ color, size }) => (
-            <FontAwesomeIcon
-              icon={faBookBookmark}
-              color={color}
-              size={size}
-            />
+            <FontAwesomeIcon icon={faBookBookmark} color={color} size={size} />
           ),
         }}
       />

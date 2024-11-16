@@ -14,11 +14,14 @@ import Constants from "expo-constants";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ThemedButton } from "@/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faMagnifyingGlass, faBookmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faBookmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
 import { useRecipeContext } from "../config/RecipeContext";
-import { RECIPE_API_KEY } from '../config/RecipeAPIconfig'; // Import the API key
-
+import { RECIPE_API_KEY } from "../config/RecipeAPIconfig"; // Import the API key
+import { MealDisplayBox } from "@/components/MealDisplayBox";
 
 interface Recipe {
   id: number;
@@ -49,13 +52,12 @@ const RecipeSearch = () => {
     Keyboard.dismiss();
 
     try {
-      const url = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(searchQuery)}&apiKey=${apiKey}&addRecipeInformation=true`;
-      console.log("Fetching from URL:", url);
-      
+      const url = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(
+        searchQuery
+      )}&apiKey=${apiKey}&addRecipeInformation=true`;
+
       const response = await fetch(url);
       const data = await response.json();
-      
-      console.log("API Response:", JSON.stringify(data, null, 2));
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch recipes");
@@ -87,21 +89,28 @@ const RecipeSearch = () => {
 
   const renderRecipeItem = ({ item }: { item: Recipe }) => (
     <View style={styles.recipeDisplayContainer}>
-      <Image 
-        source={{ uri: item.image }} 
-        style={styles.image} 
-        onError={(e) => console.log("Image loading error:", e.nativeEvent.error)}
+      <Image
+        source={{ uri: item.image }}
+        style={styles.image}
+        onError={(e) =>
+          console.log("Image loading error:", e.nativeEvent.error)
+        }
       />
       <View style={styles.recipeInfo}>
         <Text style={styles.recipeTitle}>{item.title}</Text>
-        <Text style={styles.recipeSubtext1}>Ready in {item.readyInMinutes} minutes</Text>
+        <Text style={styles.recipeSubtext1}>
+          Ready in {item.readyInMinutes} minutes
+        </Text>
         <Text style={styles.recipeSubtext2}>Servings: {item.servings}</Text>
       </View>
-      <TouchableOpacity onPress={() => toggleSaveRecipe(item)} style={styles.bookmarkButton}>
-        <FontAwesomeIcon 
-          icon={faBookmark} 
-          color={recipeSearch(item.id) ? "#B8C8A7" : "#222222"} 
-          size={24} 
+      <TouchableOpacity
+        onPress={() => toggleSaveRecipe(item)}
+        style={styles.bookmarkButton}
+      >
+        <FontAwesomeIcon
+          icon={faBookmark}
+          color={recipeSearch(item.id) ? "#B8C8A7" : "#222222"}
+          size={24}
         />
       </TouchableOpacity>
     </View>
@@ -143,15 +152,12 @@ const RecipeSearch = () => {
         )}
         {error && <Text style={styles.errorText}>{error}</Text>}
         {!loading && !error && recipes.length > 0 && (
-          <FlatList
-            data={recipes}
-            renderItem={renderRecipeItem}
-            keyExtractor={(item) => item.id.toString()}
-            style={styles.recipeList}
-          />
+          <MealDisplayBox recipes={recipes}></MealDisplayBox>
         )}
         {!loading && !error && recipes.length === 0 && searchQuery && (
-          <Text style={styles.noResultsText}>No recipes found. Try a different search term.</Text>
+          <Text style={styles.noResultsText}>
+            No recipes found. Try a different search term.
+          </Text>
         )}
       </SafeAreaView>
     </SafeAreaProvider>
