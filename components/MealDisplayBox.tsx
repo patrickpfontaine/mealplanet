@@ -11,10 +11,7 @@ import {
 } from "react-native";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons";
-import {
-  RecipeProvider,
-  useRecipeContext,
-} from "../app/config/RecipeContext";
+import { RecipeProvider, useRecipeContext } from "../app/config/RecipeContext";
 import { ThemedButton } from "./Button";
 
 interface MealDisplayBoxProps {
@@ -69,7 +66,10 @@ export function MealDisplayBox({ recipes }: MealDisplayBoxProps) {
                   <Image
                     source={{ uri: item.image }}
                     style={styles.image}
-                  ></Image>
+                    onError={(e) =>
+                      console.log("Image loading error:", e.nativeEvent.error)
+                    }
+                  />
                   <View style={{ flexDirection: "column", flex: 1 }}>
                     <Text style={styles.recipeSubtext1}>
                       Cook time: {item.readyInMinutes} min

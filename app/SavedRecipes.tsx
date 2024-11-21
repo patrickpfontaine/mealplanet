@@ -13,9 +13,13 @@ import {
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ThemedButton } from "@/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faMagnifyingGlass, faBookmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faBookmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
 import { useRecipeContext } from "./config/RecipeContext";
+import { MealDisplayBox } from "@/components/MealDisplayBox";
 
 interface Recipe {
   id: number;
@@ -41,25 +45,29 @@ const SavedRecipes: React.FC = () => {
 
   const renderRecipeItem: ListRenderItem<Recipe> = ({ item }) => (
     <View style={styles.recipeDisplayContainer}>
-      <Image 
-        source={{ uri: item.image }} 
+      <Image
+        source={{ uri: item.image }}
         style={styles.image}
-        onError={(e) => console.log("Image loading error:", e.nativeEvent.error)}
+        onError={(e) =>
+          console.log("Image loading error:", e.nativeEvent.error)
+        }
       />
       <View style={styles.recipeInfo}>
         <Text style={styles.recipeTitle}>{item.title}</Text>
-        <Text style={styles.recipeSubtext1}>Ready in {item.readyInMinutes} minutes</Text>
+        <Text style={styles.recipeSubtext1}>
+          Ready in {item.readyInMinutes} minutes
+        </Text>
         <Text style={styles.recipeSubtext2}>Servings: {item.servings}</Text>
       </View>
-      <TouchableOpacity 
-        onPress={() => removeRecipe(item.id)} 
+      <TouchableOpacity
+        onPress={() => removeRecipe(item.id)}
         style={styles.bookmarkButton}
       >
         <Image
-              //style={styles.bookmarkButton}
-              resizeMode="cover"
-              source={require("./images/delete.png")}
-            />
+          //style={styles.bookmarkButton}
+          resizeMode="cover"
+          source={require("./images/delete.png")}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -72,10 +80,10 @@ const SavedRecipes: React.FC = () => {
           <ThemedButton
             title="Search"
             bookmark={false}
-            onPress={() => router.push("/RecipeSearch")}
+            onPress={() => router.push("./RecipeSearch")}
           />
         </View>
-        
+
         <View style={styles.searchContainer}>
           <TouchableOpacity onPress={handleSearch}>
             <FontAwesomeIcon
@@ -97,24 +105,18 @@ const SavedRecipes: React.FC = () => {
         {filteredRecipes.length === 0 ? (
           <View style={styles.noRecipesContainer}>
             <Text style={styles.noRecipesText}>
-              {searchQuery 
+              {searchQuery
                 ? "No saved recipes match your search"
                 : "No saved recipes yet. Try saving some recipes from the search page!"}
             </Text>
           </View>
         ) : (
-          <FlatList<Recipe>
-            data={filteredRecipes}
-            renderItem={renderRecipeItem}
-            keyExtractor={(item) => item.id.toString()}
-            style={styles.recipeList}
-          />
+          <MealDisplayBox recipes={filteredRecipes}></MealDisplayBox>
         )}
       </SafeAreaView>
     </SafeAreaProvider>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {

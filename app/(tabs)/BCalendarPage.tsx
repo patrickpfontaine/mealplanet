@@ -12,6 +12,7 @@ import {
 import { useRouter } from "expo-router";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 import { useRecipeContext } from "../config/RecipeContext";
+import { ThemedButton } from "@/components/Button";
 
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 const DATES = ["27", "28", "29", "30", "31", "1", "26"] as const;
@@ -118,7 +119,7 @@ const DinnerCard: React.FC = () => (
       source={require("../images/pastapic.png")}
     />
     <View style={styles.recipeButton}>
-      <Text style={[styles.buttonText, styles.groupButtonText]}>Recipe</Text>
+      <ThemedButton title="Recipe"></ThemedButton>
     </View>
     <Text style={styles.dinnerDescription}>
       <Text style={styles.dinnerTitle}>Creamy Pesto Chicken Pasta{"\n"}</Text>
@@ -181,16 +182,13 @@ const CalendarPage: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.contentContainer}>
-          <Text style={styles.pageTitle}>Calendar</Text>
-          <Pressable
-            style={styles.groupButton}
-            onPress={() => router.push("/GroupPage")}
-          >
-            <Text style={[styles.buttonText, styles.groupButtonText]}>
-              Group
-            </Text>
-          </Pressable>
-
+          <View style={styles.header}>
+            <Text style={styles.pageTitle}>Calendar</Text>
+            <ThemedButton
+              title="Group"
+              onPress={() => router.push("/GroupPage")}
+            ></ThemedButton>
+          </View>
           <DinnerCard />
 
           <View style={styles.calendarContainer}>
@@ -248,23 +246,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   pageTitle: {
-    fontFamily: FontFamily.interBold,
-    fontWeight: "700",
+    fontFamily: "InterBold",
     fontSize: 24,
-    color: Color.colorGray,
-    marginTop: 57,
-    alignSelf: "flex-start",
+    color: "#222222",
   },
-  groupButton: {
-    position: "absolute",
-    right: 0,
-    top: 57,
-    width: 83,
-    height: 30,
-    borderRadius: Border.br_81xl,
-    backgroundColor: Color.colorDarkslategray_100,
-    justifyContent: "center",
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 20,
   },
   buttonText: {
     fontFamily: FontFamily.interSemiBold,
