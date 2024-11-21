@@ -20,6 +20,7 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { RecipeProvider } from "../config/RecipeContext";
+import React from "react";
 type GroceryItem = {
   id: string;
   name: string;

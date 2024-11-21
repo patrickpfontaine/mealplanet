@@ -1,10 +1,11 @@
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import {
   faBasketShopping,
   faBookBookmark,
 } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
 
 export default function TabsLayout() {
   return (
