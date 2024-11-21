@@ -192,15 +192,16 @@ const styles = StyleSheet.create({
   alreadyHaveAn: {
     position: 'absolute',
     left: '50%',
-    marginLeft: -77.5,
+    marginLeft: -85,
     top: '50%',
-    marginTop: 270,
-    width: 157,
+    marginTop: 265,
+    width: 200,
     height: 20,
     color: Color.colorGray,
     fontFamily: FontFamily.interMedium,
     fontWeight: "500",
     fontSize: FontSize.size_sm,
+   
   },
   signInButton: {
     position: 'absolute',

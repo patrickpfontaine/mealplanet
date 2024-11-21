@@ -1,25 +1,24 @@
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
   StyleSheet,
-  SafeAreaView,
   FlatList,
   TouchableOpacity,
   TextInput,
-  Keyboard,
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import {
   faCircle as faCircleFill,
-  faCross,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { RecipeProvider } from "../config/RecipeContext";
+
 type GroceryItem = {
   id: string;
   name: string;
@@ -27,13 +26,38 @@ type GroceryItem = {
   isCrossOut: boolean;
 };
 
-export default function GroceryList() {
-  const [groceryItem, setGroceryItem] = useState("");
+export default function Component() {
   const [groceryList, setGroceryList] = useState<GroceryItem[]>([]);
 
-  // Function to add an item to the list
+  useEffect(() => {
+    loadGroceryList();
+  }, []);
+
+  useEffect(() => {
+    saveGroceryList();
+  }, [groceryList]);
+
+  const loadGroceryList = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@grocery_list');
+      if (jsonValue != null) {
+        setGroceryList(JSON.parse(jsonValue));
+      }
+    } catch (e) {
+      console.error('Failed to load grocery list:', e);
+    }
+  };
+
+  const saveGroceryList = async () => {
+    try {
+      const jsonValue = JSON.stringify(groceryList);
+      await AsyncStorage.setItem('@grocery_list', jsonValue);
+    } catch (e) {
+      console.error('Failed to save grocery list:', e);
+    }
+  };
+
   const handleAddItem = () => {
-    // Add a new empty item at the end of the list for editing
     setGroceryList([
       ...groceryList,
       { id: Date.now().toString(), name: "", isEdit: true, isCrossOut: false },
@@ -41,20 +65,19 @@ export default function GroceryList() {
   };
 
   const handleSaveItem = (id: string) => {
-    // Set isEditing to false to finalize the item
     setGroceryList((prevList) =>
       prevList.map((item) =>
         item.id === id ? { ...item, isEdit: false } : item
       )
     );
   };
-  const handleUpdateItem = (id: string, text: any) => {
-    // Update the name temporarily without saving
+
+  const handleUpdateItem = (id: string, text: string) => {
     setGroceryList((prevList) =>
       prevList.map((item) => (item.id === id ? { ...item, name: text } : item))
     );
   };
-  // Function to toggle completion state
+
   const toggleCompletion = (id: string) => {
     setGroceryList(
       groceryList.map((item) =>
@@ -63,10 +86,10 @@ export default function GroceryList() {
     );
   };
 
-  // Function to remove an item from the list
   const removeGroceryItem = (id: string) => {
     setGroceryList(groceryList.filter((item) => item.id !== id));
   };
+
   const handleBlur = (id: string) => {
     setGroceryList((prevList) =>
       prevList.filter((item) => item.id !== id || item.name.trim() !== "")
@@ -88,7 +111,7 @@ export default function GroceryList() {
               icon={faCircle}
               size={20}
               style={{ color: "#3B4937" }}
-            ></FontAwesomeIcon>
+            />
             <View style={styles.opaqueCenter}></View>
           </View>
         )}
@@ -115,7 +138,7 @@ export default function GroceryList() {
           icon={faX}
           size={12}
           style={{ color: "#222222" }}
-        ></FontAwesomeIcon>
+        />
       </TouchableOpacity>
     </View>
   );
@@ -125,21 +148,10 @@ export default function GroceryList() {
       <SafeAreaProvider
         style={{
           paddingTop: 20,
-          //paddingTop: 63,
           backgroundColor: "rgba(243, 237, 228, 1)",
         }}
       >
-        <Text
-          style={{
-            fontFamily: "InterBold",
-            fontSize: 24,
-            color: "#222222",
-            //paddingBottom: 10,
-            padding: 20,
-          }}
-        >
-          Shopping List
-        </Text>
+        <Text style={styles.title}>Shopping List</Text>
         <KeyboardAvoidingView style={{ flex: 1 }}>
           <ScrollView contentContainerStyle={styles.ingredientContainer}>
             <FlatList
@@ -160,51 +172,17 @@ export default function GroceryList() {
 }
 
 const styles = StyleSheet.create({
-  recipeDisplayContainer: {
-    backgroundColor: "rgba(184, 200, 167, 1)",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    //alignItems: "center",
-    borderRadius: 16,
-    padding: 10,
+  title: {
+    fontFamily: "InterBold",
+    fontSize: 24,
+    color: "#222222",
+    padding: 20,
   },
   ingredientContainer: {
-    // borderRadius: 16,
     backgroundColor: "#b8c8a7",
-    //width: 342,
     height: 1091,
     flexDirection: "column",
     padding: 12,
-  },
-  image: {
-    width: 130,
-    height: 96,
-    marginTop: 4,
-    borderRadius: 10,
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
-  recipeTitle: {
-    flexShrink: 0,
-    textAlign: "left",
-    color: "rgba(34, 34, 34, 1)",
-    fontFamily: "InterMedium",
-    fontSize: 16,
-    padding: 4,
-    maxWidth: "90%",
-  },
-  recipeSubtext1: {
-    textAlign: "left",
-    color: "rgba(34, 34, 34, 1)",
-    fontFamily: "InterLightItalic",
-    fontSize: 14,
-  },
-  recipeSubtext2: {
-    textAlign: "left",
-    color: "rgba(34, 34, 34, 1)",
-    fontFamily: "InterLightItalic",
-    fontSize: 12,
-    marginTop: 4,
   },
   input: {
     flex: 1,
@@ -244,16 +222,6 @@ const styles = StyleSheet.create({
     fontFamily: "InterMedium",
     fontSize: 16,
   },
-  dot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: "#555",
-  },
-  completedDot: {
-    backgroundColor: "green", // Change color when completed
-  },
-
   completedText: {
     textDecorationLine: "line-through",
     color: "gray",

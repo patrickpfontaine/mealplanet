@@ -2,6 +2,8 @@ import { Stack } from "expo-router";
 import { RecipeProvider } from "./config/RecipeContext";
 import { useFonts } from "expo-font";
 
+
+
 export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -19,10 +21,10 @@ export default function RootLayout() {
     <RecipeProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="addRecipe" options={{ headerShown: false }} />
         <Stack.Screen name="SavedRecipes" options={{ headerShown: false }} />
         <Stack.Screen name="SignIn" options={{ headerShown: false }} />
         <Stack.Screen name="SignUp" options={{ headerShown: false }} />
-        <Stack.Screen name="CalendarPage" options={{ headerShown: false }} />
         <Stack.Screen name="GroupPage" options={{ headerShown: false }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
