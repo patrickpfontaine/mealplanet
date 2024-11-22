@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
+import { useRecipeContext } from "../config/RecipeContext";
 import { ThemedButton } from "@/components/Button";
 
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
@@ -18,6 +19,19 @@ const DATES = ["27", "28", "29", "30", "31", "1", "26"] as const;
 
 type DayOfWeek = (typeof DAYS_OF_WEEK)[number];
 type Date = (typeof DATES)[number];
+
+interface Recipe {
+  id: number;
+  title: string;
+  image: string;
+  readyInMinutes: number;
+  servings: number;
+}
+
+interface DayRecipe {
+  day: string;
+  recipe: Recipe;
+}
 
 interface CalendarDayProps {
   day: DayOfWeek;
@@ -138,34 +152,17 @@ const DeleteRecipe: React.FC<{
   );
 };
 
-const TaskbarIcon: React.FC<{ source: any; onPress: () => void }> = ({
-  source,
-  onPress,
-}) => (
-  <Pressable style={styles.taskbarIcon} onPress={onPress}>
-    <Image
-      source={source}
-      style={styles.taskbarIconImage}
-      resizeMode="contain"
-    />
-  </Pressable>
-);
-
 const CalendarPage: React.FC = () => {
   const router = useRouter();
-  const [events, setEvents] = useState([
-    {
-      day: "Sun" as DayOfWeek,
-      title: "Creamy Pesto Chicken Pasta",
-      time: "Cook time: 25 min",
-    },
-  ]);
+  const { dayRecipes, removeRecipeFromDay } = useRecipeContext();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState<DayOfWeek | null>(null);
 
   const handleAdd = (day: DayOfWeek) => {
-    console.log(`Add event for ${day}`);
-    // Here you would integrate with your recipe searcher API
+    router.push({
+      pathname: "/addRecipe",
+      params: { day: day },
+    });
   };
 
   const handleDelete = (day: DayOfWeek) => {
@@ -175,7 +172,7 @@ const CalendarPage: React.FC = () => {
 
   const confirmDelete = () => {
     if (selectedDay) {
-      setEvents(events.filter((event) => event.day !== selectedDay));
+      removeRecipeFromDay(selectedDay);
     }
     setShowDeleteModal(false);
     setSelectedDay(null);
@@ -206,14 +203,14 @@ const CalendarPage: React.FC = () => {
               ))}
             </View>
             {DAYS_OF_WEEK.map((day, index) => {
-              const event = events.find((e) => e.day === day);
+              const dayRecipe = dayRecipes.find((dr: DayRecipe) => dr.day === day);
               return (
                 <EventCard
                   key={day}
                   day={day}
                   top={index * 75 + 12}
-                  title={event?.title}
-                  time={event?.time}
+                  title={dayRecipe?.recipe.title}
+                  time={dayRecipe?.recipe.readyInMinutes ? `Cook time: ${dayRecipe.recipe.readyInMinutes} min` : undefined}
                   onAdd={() => handleAdd(day)}
                   onDelete={() => handleDelete(day)}
                 />
@@ -222,28 +219,6 @@ const CalendarPage: React.FC = () => {
           </View>
         </View>
       </ScrollView>
-
-      {/* <View style={styles.taskbarContainer}>
-        <Image 
-          source={require("./images/taskbarBox.png")} 
-          style={styles.taskbarBorder} 
-          resizeMode="stretch"
-        />
-        <View style={styles.taskbarContent}>
-          <TaskbarIcon 
-            source={require("./images/calendarIcon.png")} 
-            onPress={() => router.push("/BCalendarPage")}//Already on calendar page
-          />
-          <TaskbarIcon 
-            source={require("./images/notebookIcon.png")} 
-            onPress={() => {}} // Already on calendar page 
-          />
-          <TaskbarIcon 
-            source={require("./images/basketIcon.png")} 
-            onPress={() => router.push("/BCalendarPage")}
-          />
-        </View>
-      </View> */}
 
       <Modal visible={showDeleteModal} transparent={true} animationType="fade">
         <View style={styles.modalOverlay}>
@@ -463,39 +438,7 @@ const styles = StyleSheet.create({
   yesButtonText: {
     color: Color.colorWhite,
   },
-  taskbarContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 80,
-    alignItems: "center", // Center children horizontally
-    justifyContent: "flex-end", // Align children to the bottom
-  },
-  taskbarBorder: {
-    width: 393, // Match the width of the content container
-    height: "100%",
-  },
-  taskbarContent: {
-    position: "absolute",
-    bottom: 0,
-    width: 393, // Match the width of the content container
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    height: "100%",
-    paddingBottom: 10,
-  },
-  taskbarIcon: {
-    width: 50,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  taskbarIconImage: {
-    width: "100%",
-    height: "100%",
-  },
 });
 
 export default CalendarPage;
+
