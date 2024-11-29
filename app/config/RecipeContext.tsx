@@ -1,5 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import storage from './utils/storage';
+import storage from "./utils/storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface Ingredient {
+  name: string;
+  amount: number;
+  unit: string;
+}
 
 interface Recipe {
   id: number;
@@ -7,10 +14,12 @@ interface Recipe {
   image: string;
   readyInMinutes: number;
   servings: number;
+  includeIngredients: string;
 }
 
 interface DayRecipe {
   day: string;
+  date: string;
   recipe: Recipe;
 }
 
@@ -20,9 +29,10 @@ interface RecipeContextType {
   addRecipe: (recipe: Recipe) => void;
   removeRecipe: (recipeId: number) => void;
   recipeSearch: (recipeId: number) => boolean;
-  addRecipeToDay: (day: string, recipe: Recipe) => void;
+  addRecipeToDay: (day: string, date: string, recipe: Recipe) => void;
   removeRecipeFromDay: (day: string) => void;
   getRecipeForDay: (day: string) => Recipe | undefined;
+  addRecipeIngredients: (recipe: Recipe) => void;
 }
 
 const RecipeContext = createContext<RecipeContextType | undefined>(undefined);
@@ -35,15 +45,18 @@ export const useRecipeContext = () => {
   return context;
 };
 
-export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
   const [dayRecipes, setDayRecipes] = useState<DayRecipe[]>([]);
+  const [ingredients, setIngrdients] = useState<string[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const savedRecipesJson = await storage.getItem('savedRecipes');
-        const dayRecipesJson = await storage.getItem('dayRecipes');
+        const savedRecipesJson = await storage.getItem("savedRecipes");
+        const dayRecipesJson = await storage.getItem("dayRecipes");
         if (savedRecipesJson) {
           setSavedRecipes(JSON.parse(savedRecipesJson));
         }
@@ -51,7 +64,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           setDayRecipes(JSON.parse(dayRecipesJson));
         }
       } catch (error) {
-        console.error('Error loading data:', error);
+        console.error("Error loading data:", error);
       }
     };
 
@@ -62,19 +75,21 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const updatedRecipes = [...savedRecipes, recipe];
     setSavedRecipes(updatedRecipes);
     try {
-      await storage.setItem('savedRecipes', JSON.stringify(updatedRecipes));
+      await storage.setItem("savedRecipes", JSON.stringify(updatedRecipes));
     } catch (error) {
-      console.error('Error saving recipe:', error);
+      console.error("Error saving recipe:", error);
     }
   };
 
   const removeRecipe = async (recipeId: number) => {
-    const updatedRecipes = savedRecipes.filter((recipe) => recipe.id !== recipeId);
+    const updatedRecipes = savedRecipes.filter(
+      (recipe) => recipe.id !== recipeId
+    );
     setSavedRecipes(updatedRecipes);
     try {
-      await storage.setItem('savedRecipes', JSON.stringify(updatedRecipes));
+      await storage.setItem("savedRecipes", JSON.stringify(updatedRecipes));
     } catch (error) {
-      console.error('Error removing recipe:', error);
+      console.error("Error removing recipe:", error);
     }
   };
 
@@ -82,14 +97,17 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return savedRecipes.some((saved) => saved.id === recipeId);
   };
 
-  const addRecipeToDay = async (day: string, recipe: Recipe) => {
-    const updatedDayRecipes = dayRecipes.filter((dr) => dr.day !== day);
-    updatedDayRecipes.push({ day, recipe });
+  const addRecipeToDay = async (day: string, date: string, recipe: Recipe) => {
+    addRecipeIngredients(recipe);
+    const updatedDayRecipes = dayRecipes.filter(
+      (dr) => dr.day !== day && dr.date !== date
+    );
+    updatedDayRecipes.push({ day, date, recipe });
     setDayRecipes(updatedDayRecipes);
     try {
-      await storage.setItem('dayRecipes', JSON.stringify(updatedDayRecipes));
+      await storage.setItem("dayRecipes", JSON.stringify(updatedDayRecipes));
     } catch (error) {
-      console.error('Error adding recipe to day:', error);
+      console.error("Error adding recipe to day:", error);
     }
   };
 
@@ -97,15 +115,29 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const updatedDayRecipes = dayRecipes.filter((dr) => dr.day !== day);
     setDayRecipes(updatedDayRecipes);
     try {
-      await storage.setItem('dayRecipes', JSON.stringify(updatedDayRecipes));
+      await storage.setItem("dayRecipes", JSON.stringify(updatedDayRecipes));
     } catch (error) {
-      console.error('Error removing recipe from day:', error);
+      console.error("Error removing recipe from day:", error);
     }
   };
 
   const getRecipeForDay = (day: string) => {
     const dayRecipe = dayRecipes.find((dr) => dr.day === day);
     return dayRecipe ? dayRecipe.recipe : undefined;
+  };
+
+  const addRecipeIngredients = async (recipe: Recipe) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@grocery_list");
+      let groceryList = jsonValue != null ? JSON.parse(jsonValue) : [];
+      const newIngredients = recipe.includeIngredients
+        .split(",")
+        .map((item) => item.trim() || " ");
+      groceryList = [...groceryList, ...newIngredients];
+      await AsyncStorage.setItem("@grocery_list", JSON.stringify(groceryList));
+    } catch (e) {
+      console.error("Failed to update grocery list:", e);
+    }
   };
 
   return (
@@ -119,10 +151,10 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         addRecipeToDay,
         removeRecipeFromDay,
         getRecipeForDay,
+        addRecipeIngredients,
       }}
     >
       {children}
     </RecipeContext.Provider>
   );
 };
-

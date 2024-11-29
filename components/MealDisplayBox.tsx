@@ -8,11 +8,14 @@ import {
   Image,
   StyleSheet,
   ScrollView,
+  Linking,
+  Alert,
 } from "react-native";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons";
 import { RecipeProvider, useRecipeContext } from "../app/config/RecipeContext";
 import { ThemedButton } from "./Button";
+import React from "react";
 
 interface MealDisplayBoxProps {
   recipes: any[];
@@ -31,6 +34,17 @@ export function MealDisplayBox({ recipes }: MealDisplayBoxProps) {
   };
 
   const isBookmark = (recipe: any) => recipeSearch(recipe.id);
+
+  const handleRecipePress = (recipe: any) => {
+    const recipeUrl = recipe.sourceUrl;
+    if (recipeUrl) {
+      Linking.openURL(recipeUrl).catch((err) =>
+        Alert.alert("Error", "Failed to open the recipe URL.")
+      );
+    } else {
+      Alert.alert("Error", "Recipe URL not available");
+    }
+  };
 
   return (
     <RecipeProvider>
@@ -82,7 +96,7 @@ export function MealDisplayBox({ recipes }: MealDisplayBoxProps) {
                     <View style={{ alignItems: "flex-end", marginTop: 10 }}>
                       <ThemedButton
                         title="Recipe"
-                        //   onPress={() => handleRecipePress(item.id)}
+                        onPress={() => handleRecipePress(item)}
                       ></ThemedButton>
                     </View>
                   </View>

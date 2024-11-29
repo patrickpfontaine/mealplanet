@@ -17,6 +17,13 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useRecipeContext } from "./config/RecipeContext";
 import { Border, Color, FontFamily, FontSize } from "./GlobalStyles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface Ingredient {
+  name: string;
+  amount: number;
+  unit: string;
+}
 
 interface Recipe {
   id: number;
@@ -24,13 +31,14 @@ interface Recipe {
   image: string;
   readyInMinutes: number;
   servings: number;
+  includeIngredients: string;
 }
 
 const AddRecipe: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { savedRecipes, addRecipeToDay } = useRecipeContext();
   const router = useRouter();
-  const { day } = useLocalSearchParams<{ day: string }>();
+  const { day, date } = useLocalSearchParams<{ day: string; date: string }>();
 
   const filteredRecipes = savedRecipes.filter((recipe) =>
     recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -40,24 +48,52 @@ const AddRecipe: React.FC = () => {
     Keyboard.dismiss();
   };
 
-  const handleAddRecipe = (recipe: Recipe) => {
-    addRecipeToDay(day, recipe);
+  const handleAddRecipe = async (recipe: Recipe) => {
+    addRecipeToDay(day, date, recipe);
     router.back();
+  };
+
+  const addIngredientsToGroceryList = async (ingredients: string) => {
+    try {
+      // Get the current grocery list
+      const jsonValue = await AsyncStorage.getItem("@grocery_list");
+      let groceryList = jsonValue != null ? JSON.parse(jsonValue) : [];
+
+      const newIngredients = ingredients.split(",").map((item) => item.trim());
+      // Add new ingredients
+      // const newIngredients = ingredientArr.map((ing) => ({
+      //   id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      //   name: `${ing.amount} ${ing.unit} ${ing.name}`.trim(),
+      //   isEdit: false,
+      //   isCrossOut: false,
+      // }));
+
+      groceryList = [...groceryList, ...newIngredients];
+
+      // Save the updated grocery list
+      await AsyncStorage.setItem("@grocery_list", JSON.stringify(groceryList));
+    } catch (e) {
+      console.error("Failed to update grocery list:", e);
+    }
   };
 
   const renderRecipeItem: ListRenderItem<Recipe> = ({ item }) => (
     <View style={styles.recipeDisplayContainer}>
-      <Image 
-        source={{ uri: item.image }} 
+      <Image
+        source={{ uri: item.image }}
         style={styles.image}
-        onError={(e) => console.log("Image loading error:", e.nativeEvent.error)}
+        onError={(e) =>
+          console.log("Image loading error:", e.nativeEvent.error)
+        }
       />
       <View style={styles.recipeInfo}>
         <Text style={styles.recipeTitle}>{item.title}</Text>
-        <Text style={styles.recipeSubtext1}>Ready in {item.readyInMinutes} minutes</Text>
+        <Text style={styles.recipeSubtext1}>
+          Ready in {item.readyInMinutes} minutes
+        </Text>
         <Text style={styles.recipeSubtext2}>Servings: {item.servings}</Text>
       </View>
-      <TouchableOpacity 
+      <TouchableOpacity
         onPress={() => handleAddRecipe(item)}
         style={styles.addButton}
       >
@@ -77,7 +113,7 @@ const AddRecipe: React.FC = () => {
             onPress={() => router.push("/RecipeSearch")}
           />
         </View>
-        
+
         <View style={styles.searchContainer}>
           <TouchableOpacity onPress={handleSearch}>
             <FontAwesomeIcon
@@ -99,7 +135,7 @@ const AddRecipe: React.FC = () => {
         {filteredRecipes.length === 0 ? (
           <View style={styles.noRecipesContainer}>
             <Text style={styles.noRecipesText}>
-              {searchQuery 
+              {searchQuery
                 ? "No saved recipes match your search"
                 : "No saved recipes yet. Try saving some recipes from the search page!"}
             </Text>
@@ -180,14 +216,14 @@ const styles = StyleSheet.create({
   recipeSubtext1: {
     color: "rgba(34, 34, 34, 1)",
     fontFamily: FontFamily.interLight,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     fontSize: 12,
     marginBottom: 2,
   },
   recipeSubtext2: {
     color: "rgba(34, 34, 34, 1)",
     fontFamily: FontFamily.interLight,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     fontSize: 12,
   },
   addButton: {
@@ -220,4 +256,3 @@ const styles = StyleSheet.create({
 });
 
 export default AddRecipe;
-

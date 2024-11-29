@@ -29,6 +29,7 @@ interface Recipe {
   image: string;
   readyInMinutes: number;
   servings: number;
+  includeIngredients: string;
 }
 
 const RecipeSearch = () => {
@@ -36,7 +37,8 @@ const RecipeSearch = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const { addRecipe, removeRecipe, recipeSearch } = useRecipeContext();
+  const { addRecipe, removeRecipe, recipeSearch, addRecipeIngredients } =
+    useRecipeContext();
   const router = useRouter();
   const apiKey = RECIPE_API_KEY;
 
@@ -84,6 +86,7 @@ const RecipeSearch = () => {
       removeRecipe(recipe.id);
     } else {
       addRecipe(recipe);
+      console.log("ingredinets", recipe.includeIngredients);
     }
   };
 
