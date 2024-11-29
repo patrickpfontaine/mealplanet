@@ -10,15 +10,17 @@ import {
   Modal,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
-import { useRecipeContext } from "../config/RecipeContext";
+import { Border, Color, FontFamily, FontSize } from "../app/GlobalStyles";
+import { useRecipeContext } from "@/app/config/RecipeContext";
 import { ThemedButton } from "@/components/Button";
-import SwipeableBoxes from "@/components/SwipeableComp";
+import dayjs from "dayjs";
+import { faCircle } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
-const DATES = ["27", "28", "29", "30", "31", "1", "26"] as const;
 
 type DayOfWeek = (typeof DAYS_OF_WEEK)[number];
-type Date = (typeof DATES)[number];
+type Date = string;
 
 interface Recipe {
   id: number;
@@ -49,6 +51,7 @@ const CalendarDay: React.FC<CalendarDayProps> = ({ day, date, top }) => (
 interface EventCardProps {
   day: DayOfWeek;
   top: number;
+  date: Date;
   title?: string;
   time?: string;
   onAdd?: () => void;
@@ -64,13 +67,13 @@ const EventCard: React.FC<EventCardProps> = ({
   onDelete,
 }) => {
   const dayBackgrounds = {
-    Sun: require("../images/SunColorBox.png"),
-    Mon: require("../images/MonColorBox.png"),
-    Tue: require("../images/TueColorBox.png"),
-    Wed: require("../images/WedColorBox.png"),
-    Thu: require("../images/ThuColorBox.png"),
-    Fri: require("../images/FriColorBox.png"),
-    Sat: require("../images/SatColorBox.png"),
+    Sun: require("../app/images/SunColorBox.png"),
+    Mon: require("../app/images/MonColorBox.png"),
+    Tue: require("../app/images/TueColorBox.png"),
+    Wed: require("../app/images/WedColorBox.png"),
+    Thu: require("../app/images/ThuColorBox.png"),
+    Fri: require("../app/images/FriColorBox.png"),
+    Sat: require("../app/images/SatColorBox.png"),
   };
 
   return (
@@ -83,14 +86,17 @@ const EventCard: React.FC<EventCardProps> = ({
       {title && time ? (
         <>
           <Text style={styles.eventText}>
-            <Text style={styles.eventTitle}>{title}</Text>
+            <Text style={styles.eventTitle}>
+              {title}
+              {"\n"}
+            </Text>
             <Text style={styles.eventTime}>{time}</Text>
           </Text>
           <TouchableOpacity style={styles.actionButton} onPress={onDelete}>
             <Image
               style={styles.icon}
               resizeMode="cover"
-              source={require("../images/delete.png")}
+              source={require("../app/images/delete.png")}
             />
           </TouchableOpacity>
         </>
@@ -99,31 +105,13 @@ const EventCard: React.FC<EventCardProps> = ({
           <Image
             style={styles.icon}
             resizeMode="cover"
-            source={require("../images/add.png")}
+            source={require("../app/images/add.png")}
           />
         </TouchableOpacity>
       )}
     </View>
   );
 };
-
-const DinnerCard: React.FC = () => (
-  <View style={styles.dinnerCard}>
-    <Text style={styles.tonightsDinner}>Tonight's Dinner!</Text>
-    <Image
-      style={styles.dinnerImage}
-      resizeMode="cover"
-      source={require("../images/pastapic.png")}
-    />
-    <View style={styles.recipeButton}>
-      <ThemedButton title="Recipe"></ThemedButton>
-    </View>
-    <Text style={styles.dinnerDescription}>
-      <Text style={styles.dinnerTitle}>Creamy Pesto Chicken Pasta{"\n"}</Text>
-      <Text style={styles.cookTime}>Cook time: 25 min</Text>
-    </Text>
-  </View>
-);
 
 const DeleteRecipe: React.FC<{
   onClose: () => void;
@@ -152,16 +140,28 @@ const DeleteRecipe: React.FC<{
   );
 };
 
-const CalendarPage: React.FC = () => {
+const calculateDates = (
+  startDate: Date
+): { day: DayOfWeek; date: string }[] => {
+  const start = dayjs(startDate).startOf("week");
+  return DAYS_OF_WEEK.map((day, index) => ({
+    day,
+    date: start.add(index, "day").format("DD"),
+  }));
+};
+
+const CalendarPage: React.FC<{ startDate: Date }> = ({ startDate }) => {
   const router = useRouter();
   const { dayRecipes, removeRecipeFromDay } = useRecipeContext();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState<DayOfWeek | null>(null);
 
-  const handleAdd = (day: DayOfWeek) => {
+  const dates = calculateDates(startDate);
+
+  const handleAdd = (day: DayOfWeek, date: Date) => {
     router.push({
       pathname: "/addRecipe",
-      params: { day: day },
+      params: { day: day, date: date },
     });
   };
 
@@ -180,20 +180,43 @@ const CalendarPage: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.contentContainer}>
-        <View style={styles.header}>
-          <Text style={styles.pageTitle}>Calendar</Text>
-          <ThemedButton
-            title="Group"
-            onPress={() => router.push("/GroupPage")}
-          ></ThemedButton>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.contentContainer}>
+          <View style={styles.calendarContainer}>
+            <View style={styles.daysContainer}>
+              {dates.map(({ day, date }, index) => (
+                <CalendarDay
+                  key={day}
+                  day={day}
+                  date={date}
+                  top={index * 75 + 30}
+                />
+              ))}
+            </View>
+            {dates.map(({ day, date }, index) => {
+              const dayRecipe = dayRecipes.find(
+                (dr: DayRecipe) => dr.day === day
+              );
+              return (
+                <EventCard
+                  key={day}
+                  day={day}
+                  date={date}
+                  top={index * 75 + 12}
+                  title={dayRecipe?.recipe.title}
+                  time={
+                    dayRecipe?.recipe.readyInMinutes
+                      ? `Cook time: ${dayRecipe.recipe.readyInMinutes} min`
+                      : undefined
+                  }
+                  onAdd={() => handleAdd(day, date)}
+                  onDelete={() => handleDelete(day)}
+                />
+              );
+            })}
+          </View>
         </View>
-        <DinnerCard />
-
-        <View style={styles.calendarContainer}>
-          <SwipeableBoxes />
-        </View>
-      </View>
+      </ScrollView>
 
       <Modal visible={showDeleteModal} transparent={true} animationType="fade">
         <View style={styles.modalOverlay}>
@@ -210,32 +233,25 @@ const CalendarPage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f3ede4",
   },
   scrollViewContent: {
     flexGrow: 1,
     alignItems: "center",
   },
   contentContainer: {
+    width: 342,
     alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    //padding: 20,
   },
   pageTitle: {
     fontFamily: "InterBold",
     fontSize: 24,
     color: "#222222",
-    flex: 1,
-    //paddingLeft: 20,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
+    marginBottom: 20,
   },
   buttonText: {
     fontFamily: FontFamily.interSemiBold,
@@ -251,7 +267,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#e2dacc",
     borderRadius: Border.br_base,
     padding: 12,
-    marginTop: 5,
+    marginTop: 20,
   },
   tonightsDinner: {
     fontFamily: FontFamily.interBold,
@@ -297,8 +313,11 @@ const styles = StyleSheet.create({
     color: Color.colorGray,
   },
   calendarContainer: {
+    width: 342,
+    height: 559,
     backgroundColor: "#3b4937",
-    flex: 1,
+    borderRadius: Border.br_base,
+    marginTop: 20,
   },
   daysContainer: {
     position: "absolute",

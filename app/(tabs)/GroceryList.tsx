@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -9,7 +9,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
@@ -18,6 +18,7 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { RecipeProvider } from "../config/RecipeContext";
+import { useLocalSearchParams } from "expo-router";
 
 type GroceryItem = {
   id: string;
@@ -39,21 +40,21 @@ export default function Component() {
 
   const loadGroceryList = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@grocery_list');
+      const jsonValue = await AsyncStorage.getItem("@grocery_list");
       if (jsonValue != null) {
         setGroceryList(JSON.parse(jsonValue));
       }
     } catch (e) {
-      console.error('Failed to load grocery list:', e);
+      console.error("Failed to load grocery list:", e);
     }
   };
 
   const saveGroceryList = async () => {
     try {
       const jsonValue = JSON.stringify(groceryList);
-      await AsyncStorage.setItem('@grocery_list', jsonValue);
+      await AsyncStorage.setItem("@grocery_list", jsonValue);
     } catch (e) {
-      console.error('Failed to save grocery list:', e);
+      console.error("Failed to save grocery list:", e);
     }
   };
 
@@ -134,11 +135,7 @@ export default function Component() {
         </Text>
       )}
       <TouchableOpacity onPress={() => removeGroceryItem(item.id)}>
-        <FontAwesomeIcon
-          icon={faX}
-          size={12}
-          style={{ color: "#222222" }}
-        />
+        <FontAwesomeIcon icon={faX} size={12} style={{ color: "#222222" }} />
       </TouchableOpacity>
     </View>
   );
